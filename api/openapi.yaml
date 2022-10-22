@@ -1,0 +1,569 @@
+openapi: 3.0.2
+info:
+  title: Link boards
+  version: 1.0.0
+tags:
+  - name: Boards
+  - name: Links
+paths:
+  /boards:
+    post:
+      summary: Create a new board
+      tags:
+        - Boards
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Example board"
+                  minLength: 1
+                  maxLength: 100
+                description:
+                  type: string
+                  example: "This is a description." 
+                  maxLength: 1000
+              required:
+                - name
+      responses:
+        "201":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/boardWithUsersAndInvites"
+    get:
+      summary: Get boards
+      description: > 
+        Returns boards the user making the request is part of.
+        Results are sorted by the time the user joined the board, i.e. newer ones first.
+        Since the number of results might be large, the query can be paginated.
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/queryLimit"
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: Return only boards the user joined at or after the given Unix time (in nanoseconds)
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/board"
+  /boards/{boardId}:
+    delete:
+      summary: Delete a board
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+      responses:
+        "200":
+          description: success
+    get:
+      summary: Get a board 
+      description: Returns the board with the given id. The board's users and invites will only be included if the user making the request has an authorized role.
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/boardWithUsersAndInvites"
+    patch:
+      summary: Edit board
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                description:
+                  type: string
+                  maxLength: 1000
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/board"
+  /boards/{boardId}/invites:
+    post:
+      summary: Create a new invite
+      description: >
+        Creates a new invite for the given board.
+        If a user is provided in the request, only that user will be able to accept the request,
+        otherwise any user can.
+        Note that an invite cannot be created if the board is full or the invite is for a user that is already part of the board.
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  $ref: "#/components/schemas/role" 
+                  enum: ["editor", "viewer"]
+                user:
+                  $ref: "#/components/schemas/user" 
+              required:
+                - role
+      responses:
+        "201":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/boardInvite"
+  /boards/{boardId}/invites/{inviteId}:
+    post:
+      summary: Accept/Decline an invite 
+      description: An invite can only be declined by a user if it was created for that user.
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+        - $ref: "#/components/parameters/inviteIdParam"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                response:
+                  type: string
+                  enum: ["accept", "decline"]
+              required:
+                - response
+      responses:
+        "200":
+          description: success
+    delete:
+      summary: Delete an invite
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+        - $ref: "#/components/parameters/inviteIdParam"
+      responses:
+        "200":
+          description: success
+  /invites:
+    get:
+      summary: Get invites 
+      description: > 
+        Returns invites for the user making the request, sorted by the time the invite was created,
+        i.e. newest invites first.
+        Since the number of results might be large, the query can be paginated.
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/queryLimit"
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: Return only invites created at or after the given Unix time (in nanoseconds)
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/boardInvite"
+  /boards/{boardId}/users/{userId}:
+    delete:
+      summary: Remove a user from a board
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+    patch:
+      summary: Edit a user of a board
+      description: Can be used to change the role a user has on the board.
+      tags:
+        - Boards
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  enum: ["editor", "viewer"]
+              required:
+                - role
+      responses:
+        "200":
+          description: success
+          content:
+            application:json:
+              schema:
+                $ref: "#/components/schemas/boardUser"
+  /boards/{boardId}/links:
+    post:
+      summary: Create link 
+      description: Creates a new link on the given board.
+      tags:
+        - Links
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Greatest link ever"
+                  minLength: 1
+                  maxLength: 100 
+                url:
+                  type: string
+                  example: "https://example.com/awesomestuff.png"
+                  description: must use "https" scheme
+              required:
+                - title
+                - url
+      responses:
+        "201":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/link"
+    get:
+      summary: Query links 
+      description: Query links on the board, results are paginated.
+      tags:
+        - Links
+      parameters:
+        - $ref: "#/components/parameters/queryLimit"
+          default: 20
+        - in: query
+          name: sort
+          description: Order of results 
+          schema:
+            type: string
+            default: "newest"
+            enum: ["newest", "top"]
+        - in: query
+          name: cursorScore
+          schema:
+            type: integer
+          description: Return only links with at least that score
+        - in: query
+          name: cursorCreatedTime
+          schema:
+            type: integer
+            format: int64
+          description: Return only links created at or after the given Unix time (in nanoseconds)
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/link"
+  /boards/{boardId}/link/{linkId}:
+    get:
+      summary: Get a link 
+      tags:
+        - Links
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+        - $ref: "#/components/parameters/linkIdParam"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/link"
+    delete:
+      summary: Delete a link 
+      tags:
+        - Links
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+        - $ref: "#/components/parameters/linkIdParam"
+      responses:
+        "200":
+          description: success
+  /boards/{boardId}/links/{linkId}/ratings:
+    post:
+      summary: Rate a link
+      tags:
+        - Links
+      parameters:
+        - $ref: "#/components/parameters/boardIdParam"
+        - $ref: "#/components/parameters/linkIdParam"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                  enum: [-1, 1]
+                  description: -1 for downvote, 1 for upvote
+              required:
+                - rating
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/link"
+components:
+  parameters:
+    boardIdParam:
+      name: boardId
+      in: path
+      required: true
+      schema:
+        type: string
+    inviteIdParam:
+      name: inviteId
+      in: path
+      required: true
+      schema:
+        type: string
+    linkIdParam:
+      name: linkId
+      in: path
+      required: true
+      schema:
+        type: string
+    queryLimit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Maximum number of results to return
+  schemas:
+    time:
+      type: integer
+      format: int64
+      description: Unix time in nanoseconds
+      example: "1665570512173963452"
+    user:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "u-1234-5678"
+        name:
+          type: string
+          example: "John Doe"
+    role:
+      type: string
+      enum: ["owner", "viewer", "editor"] 
+    boardUser:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/user"
+        role:
+          $ref: "#/components/schemas/role"
+        createdTime:
+            $ref: "#/components/schemas/time"
+        invitedBy: 
+            $ref: "#/components/schemas/user"
+        modifiedTime:
+            $ref: "#/components/schemas/time"
+        modifiedBy: 
+            $ref: "#/components/schemas/user"
+    boardInvite:
+      type: object
+      properties:
+        boardId: 
+          type: string
+          example: "b-55067be9-62a4-4861-8bbe-9e8382dd9751"
+        inviteId:
+          type: string
+          example: "i-55067be9-62a4-4861-8bbe-9e8382dd9751"
+        role:
+          $ref: "#/components/schemas/role"
+        user:
+          $ref: "#/components/schemas/user"
+        createdTime:
+            $ref: "#/components/schemas/time"
+        createdBy: 
+            $ref: "#/components/schemas/user"
+        expiresTime:
+            $ref: "#/components/schemas/time"
+    board:
+      type: object
+      properties:
+        boardId:
+          type: string
+          example: "b-55067be9-62a4-4861-8bbe-9e8382dd9751"
+        name:
+          type: string
+          example: "Best board ever"
+        description:
+          type: string
+          example: "Just a description, nothing to see here."
+        createdTime:
+            $ref: "#/components/schemas/time"
+        createdBy: 
+            $ref: "#/components/schemas/user"
+        modifiedTime:
+            $ref: "#/components/schemas/time"
+        modifiedBy: 
+            $ref: "#/components/schemas/user"
+      example: 
+        boardId: "b-55067be9-62a4-4861-8bbe-9e8382dd9751"
+        name: "Best board ever"
+        description: "Just a description, nothing to see here."
+        createdTime: 1665570512173963500,
+        createdBy: {
+          "userId": "u-1234-5678",
+          "name": "John Doe"
+        }
+    boardWithUsersAndInvites:
+      allOf:
+        - $ref: "#/components/schemas/board"
+        - type: object
+          properties:
+            users:
+              type: array
+              items:
+                $ref: "#/components/schemas/boardUser"
+            invites:
+              type: array
+              items:
+                $ref: "#/components/schemas/boardInvite"
+          example: 
+            boardId: "b-55067be9-62a4-4861-8bbe-9e8382dd9751"
+            name: "Best board ever"
+            description: "Just a description, nothing to see here."
+            createdTime: 1665570512173963500,
+            createdBy: {
+              "userId": "u-1234-5678",
+              "name": "John Doe"
+            }
+            modifiedTime: 1665570512173963500,
+            modifiedBy: {
+              "userId": "u-1234-5678",
+              "name": "John Doe"
+            }
+            users: [
+              {
+                "user": {
+                  "userId": "u-1234-5678",
+                  "name": "John Doe"
+                },
+                "role": "owner",
+                "createdTime": 1665570512173963500,
+                "invitedBy": {
+                  "userId": "u-1234-5678",
+                  "name": "John Doe"
+                },
+                "modifiedTime": 1665570512173963500,
+                "modifiedBy": {
+                  "userId": "u-1234-5678",
+                  "name": "John Doe"
+                }
+              }
+            ]
+            invites: [
+              {
+                "boardId": "b-55067be9-62a4-4861-8bbe-9e8382dd9751",
+                "inviteId": "i-55067be9-62a4-4861-8bbe-9e8382dd9751",
+                "role": "owner",
+                "user": {
+                  "userId": "u-3921-5901",
+                  "name": "Testi Tester"
+                },
+                "createdTime": 1665570512173963500,
+                "createdBy": {
+                  "userId": "u-1234-5678",
+                  "name": "John Doe"
+                },
+                "expiresTime": 1665570512173963500
+              }
+            ]
+    link:
+      type: object
+      properties:
+        boardId:
+          type: string
+          example: "b-55067be9-62a4-4861-8bbe-9e8382dd9751"
+        linkId:
+          type: string
+          example: "l-7765378e-3592-47e6-b89e-fd12a0fdf8d2"
+        title:
+          type: string
+          example: "The greatest link ever shared"
+        url:
+          type: string
+          example: "https://example.com/awesomestuff.png"
+        createdTime:
+            $ref: "#/components/schemas/time"
+        createdBy: 
+            $ref: "#/components/schemas/user"
+        score:
+          type: integer
+        upvotes:
+          type: integer
+        downvotes:
+          type: integer
+        userRating:
+          type: integer
+          enum: [-1, 0, 1]

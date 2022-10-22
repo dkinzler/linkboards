@@ -1,0 +1,75 @@
+version: '3'
+
+tasks:
+  codegen:
+    cmds:
+      - go run github.com/d39b/kit/codegen@latest {{.CLI_ARGS}}
+
+  test:
+    cmds:
+      - go test ./...
+
+  run-inmem:
+    cmds:
+      - go run ./cmd/api --inmem --debug {{.CLI_ARGS}}
+      
+  run-emulators:
+    env: 
+      FIREBASE_PROJECT_ID: demo-project
+      FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
+      FIRESTORE_EMULATOR_HOST: localhost:8080
+    cmds:
+      - task: start-firebase-emulators-background
+      - defer: { task: stop-firebase-emulators }
+      - sleep 5
+      - go run ./cmd/api --emulators --debug
+
+  test-emulators:
+    env: 
+      FIREBASE_PROJECT_ID: demo-project
+      FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
+      FIRESTORE_EMULATOR_HOST: localhost:8080
+    cmds:
+      - |
+        firebase -P "demo-project" -c "tools/firebase_emulator/firebase.json" emulators:exec "\
+          go test -v -count=1 ./internal/links/datastore/firestore && \
+          go test -v -count=1 ./internal/boards/datastore/firestore"
+
+  api-test:
+    env: 
+      API_ADDRESS: localhost:9001
+      FIREBASE_PROJECT_ID: demo-project
+      FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
+      FIRESTORE_EMULATOR_HOST: localhost:8080
+    cmds:
+      - task: start-firebase-emulators-background
+      - defer: { task: stop-firebase-emulators }
+      - sleep 5
+      - go run ./cmd/api --emulators --debug &
+      - defer: pkill -f api
+      - sleep 5
+      - go test -v ./test/api
+
+
+  start-firebase-emulators:
+    dir: tools/firebase_emulator
+    cmds:
+      - firebase emulators:start 
+
+  start-firebase-emulators-background:
+    dir: tools/firebase_emulator
+    cmds:
+      - firebase emulators:start &
+
+
+  stop-firebase-emulators:
+    cmds:
+      - lsof -t -i :4401 | xargs --no-run-if-empty kill
+
+  firebase-helpers:
+    env: 
+      FIREBASE_PROJECT_ID: demo-project
+      FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
+      FIRESTORE_EMULATOR_HOST: localhost:8080
+    cmds:
+      - go run ./tools/firebase_emulator/helpers {{.CLI_ARGS}}
