@@ -34,11 +34,11 @@ jobs:
         FIRESTORE_EMULATOR_HOST: localhost:8080
 
     - name: End-to-end/API tests
-      run: >
-        firebase -P "demo-project" -c "./tools/firebase_emulator/firebase.json" emulators:exec
-        "go run ./cmd/api --emulators --debug &;
-        sleep 5;
-        go test -v ./test/api"
+      run: |
+        firebase -P "demo-project" -c "./tools/firebase_emulator/firebase.json" emulators:exec "\
+          go run ./cmd/api --emulators --debug & \
+          sleep 5 && \
+          go test -v ./test/api"
       env:
         API_ADDRESS: localhost:9001
         FIREBASE_PROJECT_ID: demo-project
