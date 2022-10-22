@@ -151,7 +151,7 @@ func runApp(config Config) error {
 		router.Use(handlers.CORS(corsCred, corsOrigins, corsMethods, corsHeaders))
 	*/
 
-	transport.RunDefaultServer(
+	err = transport.RunDefaultServer(
 		router,
 		nil,
 		transport.NewServerConfig().
@@ -167,7 +167,12 @@ func runApp(config Config) error {
 				logger.Warn().Log("msg", "caught panic in http handler", "error", i)
 			}),
 	)
-	return nil
+
+	if err != nil {
+		logger.Error().Log("msg", "error running http server", "error", err)
+	}
+
+	return err
 }
 
 func initFirebase(config Config) (*fb.App, *fbauth.Client, *fbfirestore.Client, error) {

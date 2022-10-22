@@ -1,2 +1,0 @@
-use Redoc CLI to build html documentation from the OpenApi spec, see
-https://redocly.com/docs/redoc/deployment/cli/
