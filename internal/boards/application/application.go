@@ -69,6 +69,9 @@ type BoardApplicationService interface {
 	//	"endpoints": [{"http": {"path":"/boards/{boardId}/users/{userId}", "method":"PATCH"}}]
 	// }
 	EditBoardUser(ctx context.Context, boardId string, userId string, bue BoardUserEdit) (BoardUser, error)
+	// We don't actually expose this method, it is there do demonstrate how we can use go concurrency
+	// in service methods that assemble different pieces of data.
+	BoardsAndInvites(ctx context.Context) (BoardsAndInvites, error)
 }
 
 type NewBoard struct {
@@ -217,6 +220,13 @@ type QueryParams struct {
 	// Cursor for pagination, only return results created at or before the given unix time (nanoseconds).
 	// Can obtain a cursor value by e.g. taking the created time of the oldest element in the last query and then subtracting 1.
 	Cursor int64
+}
+
+type BoardsAndInvites struct {
+	Boards       []Board  `json:"boards,omitempty"`
+	BoardsError  string   `json:"boardsError,omitempty"`
+	Invites      []Invite `json:"invites,omitempty"`
+	InvitesError string   `json:"invitesError,omitempty"`
 }
 
 type boardApplicationService struct {
@@ -613,4 +623,100 @@ func (bas *boardApplicationService) EditBoardUser(ctx context.Context, boardId s
 		ModifiedTime: boardUser.ModifiedTime,
 		ModifiedBy:   boardUser.ModifiedBy,
 	}, nil
+}
+
+// We don't actually expose this method, it is there do demonstrate how we can use go concurrency
+// in service methods that assemble different pieces of data.
+// Will return both boards and invites for the user making the request.
+// For some clients it might make more sense to retrieve the data together in one request instead of performing multiple.
+func (bas *boardApplicationService) BoardsAndInvites(ctx context.Context) (BoardsAndInvites, error) {
+	user, ok := userFromContext(ctx)
+	if !ok {
+		return BoardsAndInvites{}, newUnauthenticatedError()
+	}
+
+	if !(authenticatedScopes.HasScope(listUserBoardsScope) && authenticatedScopes.HasScope(listUserInvitesScope)) {
+		return BoardsAndInvites{}, newPermissionDeniedError()
+	}
+
+	// The following will start two go routines to load the boards and invites concurrently.
+	// If at least one of those operations succeed, we return the data that was available, so that client get at least something.
+
+	bc := runConcurrent(func() ([]Board, error) {
+		boards, err := bas.boardDataStore.BoardsForUser(ctx, user.UserId, domain.NewQueryParams())
+		if err != nil {
+			return nil, err
+		}
+		result := make([]Board, len(boards))
+		for i, b := range boards {
+			result[i] = Board{
+				BoardId:     b.BoardId,
+				Name:        b.Name,
+				Description: b.Description,
+				CreatedTime: b.CreatedTime,
+				CreatedBy:   b.CreatedBy,
+			}
+		}
+		return result, nil
+	})
+	ic := runConcurrent(func() ([]Invite, error) {
+		invites, err := bas.boardDataStore.InvitesForUser(ctx, user.UserId, domain.NewQueryParams())
+		if err != nil {
+			return nil, err
+		}
+		result := make([]Invite, 0, len(invites))
+		for boardId, invite := range invites {
+			result = append(result, Invite{
+				BoardId:     boardId,
+				InviteId:    invite.InviteId,
+				Role:        invite.Role,
+				User:        invite.User,
+				CreatedTime: invite.CreatedTime,
+				CreatedBy:   invite.CreatedBy,
+				ExpiresTime: invite.ExpiresTime,
+			})
+		}
+		return result, nil
+	})
+
+	result := BoardsAndInvites{}
+	for i := 0; i < 2; i++ {
+		select {
+		case boards := <-bc:
+			if boards.err == nil {
+				result.Boards = boards.result
+			} else {
+				result.BoardsError = "Could not load boards"
+			}
+		case invites := <-ic:
+			if invites.err == nil {
+				result.Invites = invites.result
+			} else {
+				result.InvitesError = "Could not load invites"
+			}
+		}
+	}
+
+	if result.BoardsError != "" && result.InvitesError != "" {
+		return BoardsAndInvites{}, newServiceError(nil, errors.Internal)
+	}
+
+	return result, nil
+}
+
+type result[T any] struct {
+	result T
+	err    error
+}
+
+func runConcurrent[T any](f func() (T, error)) <-chan result[T] {
+	rChan := make(chan result[T], 1)
+	go func() {
+		t, err := f()
+		rChan <- result[T]{
+			result: t,
+			err:    err,
+		}
+	}()
+	return rChan
 }
