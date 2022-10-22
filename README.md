@@ -1,4 +1,4 @@
-# Linkboard
+# Linkboards
 
 A sample API application for sharing links implemented in Go.
 Users can create link boards and invite other users to join.
@@ -16,7 +16,7 @@ It is inteded to showcase Go development best practices:
 - Unit, integration and end-to-end/API testing
 - ...
 
-A more in-depth description of the API is provided by the [OpenAPI documentation](api/openapi.html).
+A more in-depth description of the API is provided by the [OpenAPI documentation](https://d39b.github.io/linkboards/).
 
 A discussion of the architecture of the app can be found [here](architecture.md).
 

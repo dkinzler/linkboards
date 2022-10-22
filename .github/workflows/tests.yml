@@ -1,0 +1,47 @@
+name: Tests 
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - run: npm install -g firebase-tools
+
+    - name: Unit tests
+      run: go test -v ./...
+
+    - name: Integration tests
+      run: >
+          firebase -P "demo-project" -c "./firebase/.firebase.json" emulators:exec
+          "go test -v -count=1 ./internal/boards/datastore/firestore &&
+          go test -v -count=1 ./internal/links/datastore/firestore"
+      env:
+        FIREBASE_PROJECT_ID: demo-project
+        FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
+        FIRESTORE_EMULATOR_HOST: localhost:8080
+
+    - name: End-to-end/API tests
+      run: |
+        - firebase emulators:start &
+        - sleep 5
+        - go run ./cmd/api --emulators --debug &
+        - sleep 5
+        - go test -v ./test/api
+      env:
+        API_ADDRESS: localhost:9001
+        FIREBASE_PROJECT_ID: demo-project
+        FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
+        FIRESTORE_EMULATOR_HOST: localhost:8080
