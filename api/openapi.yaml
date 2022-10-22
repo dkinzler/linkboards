@@ -2,13 +2,20 @@ openapi: 3.0.2
 info:
   title: Link boards
   version: 1.0.0
+  description: | 
+    An API for sharing links.
+    Users can create link boards and invite other users to join them.
+    Links can be posted to boards, users can rate and discover them using queries.
 tags:
   - name: Boards
   - name: Links
+security:
+  - BearerAuth: []
 paths:
   /boards:
     post:
       summary: Create a new board
+      description: Creates a new board. The creating user will have the "owner" role. A board can have at most 32 users.
       tags:
         - Boards
       requestBody:
@@ -30,11 +37,27 @@ paths:
                 - name
       responses:
         "201":
-          description: success
+          description: Success
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/boardWithUsersAndInvites"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "400":
+          description: |
+            Invalid request, the following errors are possible:
+            - 1 - Empty board name
+            - 2 - Name too long
+            - 3 - Description too long
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
     get:
       summary: Get boards
       description: > 
@@ -51,7 +74,7 @@ paths:
           schema:
             type: integer
             format: int64
-          description: Return only boards the user joined at or after the given Unix time (in nanoseconds)
+          description: Return only boards the user joined at or before the given Unix time (in nanoseconds)
       responses:
         "200":
           description: success
@@ -61,6 +84,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/board"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
   /boards/{boardId}:
     delete:
       summary: Delete a board
@@ -71,6 +98,12 @@ paths:
       responses:
         "200":
           description: success
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     get:
       summary: Get a board 
       description: Returns the board with the given id. The board's users and invites will only be included if the user making the request has an authorized role.
@@ -85,6 +118,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/boardWithUsersAndInvites"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       summary: Edit board
       tags:
@@ -111,14 +150,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/board"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "400":
+          description: |
+            Invalid request, the following errors are possible:
+            - 1 - Empty board name
+            - 2 - Name too long
+            - 3 - Description too long
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
   /boards/{boardId}/invites:
     post:
       summary: Create a new invite
       description: >
         Creates a new invite for the given board.
-        If a user is provided in the request, only that user will be able to accept the request,
+        If a user is provided in the request, only that user will be able to accept the invite,
         otherwise any user can.
         Note that an invite cannot be created if the board is full or the invite is for a user that is already part of the board.
+        The number of users and invites per board is limited to 32.
       tags:
         - Boards
       parameters:
@@ -143,6 +199,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/boardInvite"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "400":
+          description: |
+            Invalid request or failed precondition, the following errors are possible:
+            - 4 - Invalid role
+            - 5 - Max number of invites reached 
+            - 6 - Board full
+            - 7 - User already invited
+            - 8 - User already on board
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
   /boards/{boardId}/invites/{inviteId}:
     post:
       summary: Accept/Decline an invite 
@@ -166,6 +238,22 @@ paths:
       responses:
         "200":
           description: success
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "400":
+          description: |
+            Invalid request or failed precondition, the following errors are possible:
+            - 9 - Invite expired
+            - 10 - Invite is for another user
+            - Invalid invite response 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
     delete:
       summary: Delete an invite
       tags:
@@ -176,6 +264,12 @@ paths:
       responses:
         "200":
           description: success
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /invites:
     get:
       summary: Get invites 
@@ -193,7 +287,7 @@ paths:
           schema:
             type: integer
             format: int64
-          description: Return only invites created at or after the given Unix time (in nanoseconds)
+          description: Return only invites created at or before the given Unix time (in nanoseconds)
       responses:
         "200":
           description: success
@@ -203,9 +297,14 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/boardInvite"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
   /boards/{boardId}/users/{userId}:
     delete:
       summary: Remove a user from a board
+      description: Note that the board owner cannot be removed.
       tags:
         - Boards
       parameters:
@@ -218,6 +317,21 @@ paths:
       responses:
         "200":
           description: success
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "400":
+          description: |
+            Invalid request or failed precondition, the following errors are possible:
+            - 12 - User not on board
+            - 13 - Board owner cannot be removed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
     patch:
       summary: Edit a user of a board
       description: Can be used to change the role a user has on the board.
@@ -248,6 +362,23 @@ paths:
             application:json:
               schema:
                 $ref: "#/components/schemas/boardUser"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "400":
+          description: |
+            Invalid request or failed precondition, the following errors are possible:
+            - 12 - User not on board
+            - 4 - Invalid role 
+            - 14 - Only board creator can have owner role
+            - 15 - Cannot change the role of the board owner
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
   /boards/{boardId}/links:
     post:
       summary: Create link 
@@ -281,6 +412,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/link"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "400":
+          description: |
+            Invalid request, the following errors are possible:
+            - 1 - Title is empty 
+            - 2 - Title too long
+            - 3 - URL empty 
+            - 4 - URL invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
     get:
       summary: Query links 
       description: Query links on the board, results are paginated.
@@ -300,13 +446,13 @@ paths:
           name: cursorScore
           schema:
             type: integer
-          description: Return only links with at least that score
+          description: Return only links with less than or with score
         - in: query
           name: cursorCreatedTime
           schema:
             type: integer
             format: int64
-          description: Return only links created at or after the given Unix time (in nanoseconds)
+          description: Return only links created at or before the given Unix time (in nanoseconds)
       responses:
         "200":
           description: success
@@ -316,6 +462,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/link"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
   /boards/{boardId}/link/{linkId}:
     get:
       summary: Get a link 
@@ -331,6 +481,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/link"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       summary: Delete a link 
       tags:
@@ -341,6 +497,12 @@ paths:
       responses:
         "200":
           description: success
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /boards/{boardId}/links/{linkId}/ratings:
     post:
       summary: Rate a link
@@ -368,7 +530,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/link"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "400":
+          description: |
+            Invalid request, the following errors are possible:
+            - 5 - Invalid rating 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
   parameters:
     boardIdParam:
       name: boardId
@@ -395,7 +575,30 @@ components:
       schema:
         type: integer
       description: Maximum number of results to return
+  responses:
+    NotFound:
+      description: The specified resource was not found
+    Unauthenticated:
+      description: Missing or invalid authentication credentials
+    Unauthorized:
+      description: User does not have permission to access the resource/execute the operation
   schemas:
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties: 
+            code:
+              type: integer
+              description: Integer error code
+            message:
+              type: string
+              description: Message describing the error
+      example:
+        error:
+          code: 42
+          message: "Invalid request"
     time:
       type: integer
       format: int64
