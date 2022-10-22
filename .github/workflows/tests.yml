@@ -25,7 +25,7 @@ jobs:
 
     - name: Integration tests
       run: >
-          firebase -P "demo-project" -c "./firebase/.firebase.json" emulators:exec
+          firebase -P "demo-project" -c "./tools/firebase_emulator/.firebase.json" emulators:exec
           "go test -v -count=1 ./internal/boards/datastore/firestore &&
           go test -v -count=1 ./internal/links/datastore/firestore"
       env:
@@ -35,7 +35,7 @@ jobs:
 
     - name: End-to-end/API tests
       run: |
-        - firebase emulators:start &
+        - firebase -P "demo-project" -c "./tools/firebase_emulator/.firebase.json" emulators:start &
         - sleep 5
         - go run ./cmd/api --emulators --debug &
         - sleep 5
