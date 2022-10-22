@@ -28,7 +28,8 @@ const (
 )
 
 // BoardService implements operations on boards, users and invites.
-// It uses an implementaiton of BoardDataStore to read and persist boards/users/invites.
+// It uses an implementaiton of BoardDataStore to read and persist boards/users/invites,
+// and an implementation of EventPublisher to make events available to other components/systems.
 // BoardService does not perform authorization, that should be handled in application services using this package.
 //
 // We consider a board together with its users and invites as the unit of consistency, i.e. operations on BoardService can run concurrently only for different boards.
@@ -51,10 +52,13 @@ const (
 // TransactionExpectation back and forth.
 type BoardService struct {
 	ds BoardDataStore
+	ep EventPublisher
 }
 
-func NewBoardService(ds BoardDataStore) *BoardService {
-	return &BoardService{ds: ds}
+// The BoardDataStore passed must not be nil.
+// The EventPublisher can be, in which case the events will just end up nowhere.
+func NewBoardService(ds BoardDataStore, ep EventPublisher) *BoardService {
+	return &BoardService{ds: ds, ep: newMaybeEventPublisher(ep)}
 }
 
 func newServiceError(inner error, code errors.ErrorCode) errors.Error {
@@ -77,6 +81,14 @@ func (bs *BoardService) CreateBoard(ctx context.Context, name, description strin
 		return BoardWithUsersAndInvites{}, newServiceError(err, errors.Internal).WithInternalMessage("could not create board")
 	}
 
+	bs.ep.PublishEvent(ctx, BoardCreated{
+		BoardId:     board.BoardId,
+		Name:        board.Name,
+		Description: board.Description,
+		CreatedTime: board.CreatedTime,
+		CreatedBy:   board.CreatedBy,
+	})
+
 	return BoardWithUsersAndInvites{
 		Board:   board,
 		Users:   []BoardUser{boardUser},
@@ -84,8 +96,18 @@ func (bs *BoardService) CreateBoard(ctx context.Context, name, description strin
 	}, nil
 }
 
-func (bs *BoardService) DeleteBoard(ctx context.Context, boardId string) error {
-	return bs.ds.DeleteBoard(ctx, boardId)
+func (bs *BoardService) DeleteBoard(ctx context.Context, boardId string, user User) error {
+	err := bs.ds.DeleteBoard(ctx, boardId)
+	if err != nil {
+		return err
+	}
+
+	bs.ep.PublishEvent(ctx, BoardDeleted{
+		BoardId:   boardId,
+		DeletedBy: user,
+	})
+
+	return nil
 }
 
 type BoardEdit struct {

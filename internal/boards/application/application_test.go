@@ -106,7 +106,7 @@ func TestAuthorization(t *testing.T) {
 
 		authStore := store.NewDefaultAuthorizationStore(ds)
 		service := &boardApplicationService{
-			boardService:   domain.NewBoardService(ds),
+			boardService:   domain.NewBoardService(ds, nil),
 			boardDataStore: ds,
 			authChecker:    auth.NewAuthorizationChecker(rts, authStore),
 		}
@@ -167,7 +167,7 @@ func TestBoardReturnsUsersAndInvitesOnlyIfAuthorized(t *testing.T) {
 
 		authStore := store.NewDefaultAuthorizationStore(ds)
 		service := &boardApplicationService{
-			boardService:   domain.NewBoardService(ds),
+			boardService:   domain.NewBoardService(ds, nil),
 			boardDataStore: ds,
 			authChecker:    auth.NewAuthorizationChecker(rts, authStore),
 		}

@@ -237,7 +237,7 @@ type boardApplicationService struct {
 
 func NewBoardApplicationService(boardDataStore domain.BoardDataStore, authorizationStore auth.AuthorizationStore) BoardApplicationService {
 	return &boardApplicationService{
-		boardService:   domain.NewBoardService(boardDataStore),
+		boardService:   domain.NewBoardService(boardDataStore, nil),
 		boardDataStore: boardDataStore,
 		authChecker:    NewAuthorizationChecker(authorizationStore),
 	}
@@ -300,7 +300,7 @@ func (bas *boardApplicationService) DeleteBoard(ctx context.Context, boardId str
 		return newPermissionDeniedError()
 	}
 
-	err = bas.boardService.DeleteBoard(ctx, boardId)
+	err = bas.boardService.DeleteBoard(ctx, boardId, toDomainUser(user))
 	if err != nil {
 		return err
 	}
@@ -709,6 +709,8 @@ type result[T any] struct {
 	err    error
 }
 
+// runs the function in a new go routine and returns a channel on which the
+// result of the function will be sent once it's done
 func runConcurrent[T any](f func() (T, error)) <-chan result[T] {
 	rChan := make(chan result[T], 1)
 	go func() {

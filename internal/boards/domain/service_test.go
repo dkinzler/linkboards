@@ -54,7 +54,7 @@ func (m *MockBoardDataStore) InvitesForUser(ctx context.Context, userId string, 
 
 func newTestService() (BoardService, *MockBoardDataStore) {
 	ds := &MockBoardDataStore{}
-	return *NewBoardService(ds), ds
+	return *NewBoardService(ds, nil), ds
 }
 
 var testTime = stdtime.Date(2022, 1, 1, 0, 0, 0, 0, stdtime.UTC)
