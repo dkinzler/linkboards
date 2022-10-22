@@ -4,7 +4,7 @@ package inmem
 
 import (
 	"context"
-	"go-sample/internal/boards/domain"
+	"linkboards/internal/boards/domain"
 	"sort"
 	"sync"
 

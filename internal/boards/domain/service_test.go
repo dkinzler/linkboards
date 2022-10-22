@@ -2,7 +2,7 @@ package domain
 
 import (
 	"context"
-	"go-sample/internal/auth"
+	"linkboards/internal/auth"
 	"testing"
 	stdtime "time"
 

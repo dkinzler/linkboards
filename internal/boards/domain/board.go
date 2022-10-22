@@ -5,7 +5,7 @@
 package domain
 
 import (
-	"go-sample/internal/auth"
+	"linkboards/internal/auth"
 	stdtime "time"
 
 	"github.com/d39b/kit/errors"

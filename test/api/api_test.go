@@ -3,7 +3,7 @@ package api
 import (
 	"errors"
 	"fmt"
-	"go-sample/tools/client"
+	"linkboards/tools/client"
 	"log"
 	"math/rand"
 	"os"

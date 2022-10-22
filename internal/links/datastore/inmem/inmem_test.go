@@ -1,7 +1,7 @@
 package inmem
 
 import (
-	"go-sample/internal/links/datastore"
+	"linkboards/internal/links/datastore"
 	"testing"
 )
 

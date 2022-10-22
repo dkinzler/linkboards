@@ -2,9 +2,9 @@ package application
 
 import (
 	"context"
-	"go-sample/internal/auth"
-	"go-sample/internal/links/datastore/inmem"
-	"go-sample/internal/links/domain"
+	"linkboards/internal/auth"
+	"linkboards/internal/links/datastore/inmem"
+	"linkboards/internal/links/domain"
 	"testing"
 	stdtime "time"
 

@@ -3,9 +3,10 @@ package transport
 
 import (
 	"context"
+	application "linkboards/internal/boards/application"
+
 	e "github.com/d39b/kit/endpoint"
 	endpoint "github.com/go-kit/kit/endpoint"
-	application "go-sample/internal/boards/application"
 )
 
 type CreateBoardRequest struct {

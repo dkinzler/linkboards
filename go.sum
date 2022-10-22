@@ -90,14 +90,6 @@ github.com/cncf/xds/go v0.0.0-20211011173535-cb28da3451f1/go.mod h1:eXthEFrGJvWH
 github.com/cpuguy83/go-md2man/v2 v2.0.2 h1:p1EgwI/C7NhT0JmVkwCD2ZBK8j4aeHQX2pMHHBfMQ6w=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
-github.com/d39b/kit v0.1.0 h1:iJc/FhqpxDMjDGi8GREVAnnAwX9+799+KdTegs1ITVY=
-github.com/d39b/kit v0.1.0/go.mod h1:+8Z35VuLtr9U5zl8+RZ9Rw+buTHyqMXAA+dowP3Z2yQ=
-github.com/d39b/kit v0.2.0 h1:NDB7WAU7hVfbupZETwDPBXjACCdFTc7aj+M5SMJwOZo=
-github.com/d39b/kit v0.2.0/go.mod h1:+8Z35VuLtr9U5zl8+RZ9Rw+buTHyqMXAA+dowP3Z2yQ=
-github.com/d39b/kit v0.2.1 h1:d3vGmEHiV4Jopuo7M750Gx1mVb+0pC0YrNtTfFb3ANg=
-github.com/d39b/kit v0.2.1/go.mod h1:+8Z35VuLtr9U5zl8+RZ9Rw+buTHyqMXAA+dowP3Z2yQ=
-github.com/d39b/kit v0.3.0 h1:FM9OjsvO3VgVjdXmr15jvxd2ouvKQ0EeYTaEg/TkToE=
-github.com/d39b/kit v0.3.0/go.mod h1:+8Z35VuLtr9U5zl8+RZ9Rw+buTHyqMXAA+dowP3Z2yQ=
 github.com/d39b/kit v0.4.0 h1:+DoqFyTJyTyKiWkLOxKKzRR4hhOmO164OUX0b0l11Z8=
 github.com/d39b/kit v0.4.0/go.mod h1:+8Z35VuLtr9U5zl8+RZ9Rw+buTHyqMXAA+dowP3Z2yQ=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

@@ -1,8 +1,8 @@
 package application
 
 import (
-	"go-sample/internal/auth"
-	"go-sample/internal/links/domain"
+	"linkboards/internal/auth"
+	"linkboards/internal/links/domain"
 )
 
 func toDomainUser(u auth.User) domain.User {

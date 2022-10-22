@@ -1,13 +1,13 @@
 package boards
 
 import (
-	"go-sample/internal/auth"
-	"go-sample/internal/auth/store"
-	"go-sample/internal/boards/application"
-	fs "go-sample/internal/boards/datastore/firestore"
-	"go-sample/internal/boards/datastore/inmem"
-	"go-sample/internal/boards/domain"
-	"go-sample/internal/boards/transport"
+	"linkboards/internal/auth"
+	"linkboards/internal/auth/store"
+	"linkboards/internal/boards/application"
+	fs "linkboards/internal/boards/datastore/firestore"
+	"linkboards/internal/boards/datastore/inmem"
+	"linkboards/internal/boards/domain"
+	"linkboards/internal/boards/transport"
 
 	e "github.com/d39b/kit/endpoint"
 	"github.com/d39b/kit/errors"

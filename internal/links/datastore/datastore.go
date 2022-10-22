@@ -2,7 +2,7 @@ package datastore
 
 import (
 	"context"
-	"go-sample/internal/links/domain"
+	"linkboards/internal/links/domain"
 	"testing"
 	"time"
 

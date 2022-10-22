@@ -2,7 +2,7 @@ package firestore
 
 import (
 	"context"
-	"go-sample/internal/boards/domain"
+	"linkboards/internal/boards/domain"
 
 	"github.com/d39b/kit/errors"
 	fs "github.com/d39b/kit/firebase/firestore"

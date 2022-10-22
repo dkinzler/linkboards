@@ -2,8 +2,8 @@ package application
 
 import (
 	"context"
-	"go-sample/internal/auth"
-	"go-sample/internal/boards/domain"
+	"linkboards/internal/auth"
+	"linkboards/internal/boards/domain"
 )
 
 func userFromContext(ctx context.Context) (auth.User, bool) {

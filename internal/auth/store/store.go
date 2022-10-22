@@ -2,8 +2,8 @@ package store
 
 import (
 	"context"
-	"go-sample/internal/auth"
-	"go-sample/internal/boards/domain"
+	"linkboards/internal/auth"
+	"linkboards/internal/boards/domain"
 
 	"github.com/d39b/kit/errors"
 )

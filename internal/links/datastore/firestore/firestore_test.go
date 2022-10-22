@@ -2,7 +2,7 @@ package firestore
 
 import (
 	"context"
-	"go-sample/internal/links/datastore"
+	"linkboards/internal/links/datastore"
 	"log"
 	"os"
 	"testing"

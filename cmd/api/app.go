@@ -13,10 +13,10 @@ import (
 	fb "firebase.google.com/go/v4"
 	fbauth "firebase.google.com/go/v4/auth"
 
-	"go-sample/internal/auth/middleware"
-	"go-sample/internal/auth/store"
-	"go-sample/internal/boards"
-	"go-sample/internal/links"
+	"linkboards/internal/auth/middleware"
+	"linkboards/internal/auth/store"
+	"linkboards/internal/boards"
+	"linkboards/internal/links"
 
 	lfb "github.com/d39b/kit/firebase"
 

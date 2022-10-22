@@ -1,4 +1,4 @@
-module go-sample
+module linkboards
 
 go 1.19
 

@@ -2,8 +2,8 @@ package application
 
 import (
 	"context"
-	"go-sample/internal/auth"
-	"go-sample/internal/links/domain"
+	"linkboards/internal/auth"
+	"linkboards/internal/links/domain"
 
 	"github.com/d39b/kit/errors"
 )

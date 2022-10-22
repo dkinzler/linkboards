@@ -2,10 +2,10 @@ package application
 
 import (
 	"context"
-	"go-sample/internal/auth"
-	"go-sample/internal/auth/store"
-	"go-sample/internal/boards/datastore/inmem"
-	"go-sample/internal/boards/domain"
+	"linkboards/internal/auth"
+	"linkboards/internal/auth/store"
+	"linkboards/internal/boards/datastore/inmem"
+	"linkboards/internal/boards/domain"
 	"testing"
 	stdtime "time"
 

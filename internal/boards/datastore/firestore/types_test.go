@@ -1,7 +1,7 @@
 package firestore
 
 import (
-	"go-sample/internal/boards/domain"
+	"linkboards/internal/boards/domain"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

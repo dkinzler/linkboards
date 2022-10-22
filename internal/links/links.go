@@ -1,12 +1,12 @@
 package links
 
 import (
-	"go-sample/internal/auth"
-	"go-sample/internal/links/application"
-	fs "go-sample/internal/links/datastore/firestore"
-	"go-sample/internal/links/datastore/inmem"
-	"go-sample/internal/links/domain"
-	"go-sample/internal/links/transport"
+	"linkboards/internal/auth"
+	"linkboards/internal/links/application"
+	fs "linkboards/internal/links/datastore/firestore"
+	"linkboards/internal/links/datastore/inmem"
+	"linkboards/internal/links/domain"
+	"linkboards/internal/links/transport"
 
 	e "github.com/d39b/kit/endpoint"
 	"github.com/d39b/kit/errors"

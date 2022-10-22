@@ -3,7 +3,7 @@ package middleware
 import (
 	"context"
 	"encoding/base64"
-	"go-sample/internal/auth"
+	"linkboards/internal/auth"
 	"testing"
 
 	"github.com/d39b/kit/errors"

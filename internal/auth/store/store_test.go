@@ -2,9 +2,9 @@ package store
 
 import (
 	"context"
-	"go-sample/internal/auth"
-	"go-sample/internal/boards/datastore/inmem"
-	"go-sample/internal/boards/domain"
+	"linkboards/internal/auth"
+	"linkboards/internal/boards/datastore/inmem"
+	"linkboards/internal/boards/domain"
 	"testing"
 
 	"github.com/d39b/kit/errors"

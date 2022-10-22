@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"go-sample/internal/auth"
+	"linkboards/internal/auth"
 	"strings"
 	"testing"
 	stdtime "time"
