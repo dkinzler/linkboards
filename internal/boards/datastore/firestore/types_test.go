@@ -1,8 +1,9 @@
 package firestore
 
 import (
-	"linkboards/internal/boards/domain"
 	"testing"
+
+	"github.com/d39b/linkboards/internal/boards/domain"
 
 	"github.com/stretchr/testify/assert"
 )

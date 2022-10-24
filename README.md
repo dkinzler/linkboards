@@ -1,5 +1,8 @@
 # Linkboards
 
+![GitHub Workflow Status](https://github.com/d39b/linkboards/actions/workflows/tests.yml/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/d39b/linkboards)](https://goreportcard.com/report/github.com/d39b/linkboards)
+
 A sample API application for sharing links implemented in Go.
 Users can create link boards and invite other users to join.
 Links can be posted to boards, users can rate and discover them using queries.
@@ -78,6 +81,3 @@ task api-test
 ## License
 
 [MIT](LICENSE)
-
-
-

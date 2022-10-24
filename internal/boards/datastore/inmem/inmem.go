@@ -4,9 +4,10 @@ package inmem
 
 import (
 	"context"
-	"linkboards/internal/boards/domain"
 	"sort"
 	"sync"
+
+	"github.com/d39b/linkboards/internal/boards/domain"
 
 	"github.com/d39b/kit/errors"
 )

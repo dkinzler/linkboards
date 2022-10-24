@@ -3,8 +3,9 @@ package middleware
 import (
 	"context"
 	"encoding/base64"
-	"linkboards/internal/auth"
 	"strings"
+
+	"github.com/d39b/linkboards/internal/auth"
 
 	"github.com/d39b/kit/errors"
 	lfbauth "github.com/d39b/kit/firebase/auth"

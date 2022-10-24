@@ -2,9 +2,10 @@ package application
 
 import (
 	"context"
-	"linkboards/internal/auth"
-	"linkboards/internal/boards/domain"
 	"sort"
+
+	"github.com/d39b/linkboards/internal/auth"
+	"github.com/d39b/linkboards/internal/boards/domain"
 
 	"github.com/d39b/kit/errors"
 )
@@ -285,7 +286,6 @@ func (bas *boardApplicationService) CreateBoard(ctx context.Context, nb NewBoard
 	}, nil
 }
 
-// TODO should we do some basic sanity checks, e.g. if boardId is empty?
 func (bas *boardApplicationService) DeleteBoard(ctx context.Context, boardId string) error {
 	user, ok := userFromContext(ctx)
 	if !ok {
@@ -429,7 +429,6 @@ func (bas *boardApplicationService) Boards(ctx context.Context, qp QueryParams) 
 
 	boards, err := bas.boardDataStore.BoardsForUser(ctx, user.UserId, dqp)
 	if err != nil {
-		//TODO wrap error here
 		return nil, err
 	}
 
@@ -537,7 +536,6 @@ func (bas *boardApplicationService) Invites(ctx context.Context, qp QueryParams)
 
 	invites, err := bas.boardDataStore.InvitesForUser(ctx, user.UserId, dqp)
 	if err != nil {
-		//TODO wrap error here
 		return nil, err
 	}
 

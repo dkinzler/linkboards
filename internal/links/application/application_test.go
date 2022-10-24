@@ -2,11 +2,12 @@ package application
 
 import (
 	"context"
-	"linkboards/internal/auth"
-	"linkboards/internal/links/datastore/inmem"
-	"linkboards/internal/links/domain"
 	"testing"
 	stdtime "time"
+
+	"github.com/d39b/linkboards/internal/auth"
+	"github.com/d39b/linkboards/internal/links/datastore/inmem"
+	"github.com/d39b/linkboards/internal/links/domain"
 
 	"github.com/d39b/kit/errors"
 	"github.com/d39b/kit/time"

@@ -1,12 +1,12 @@
 package links
 
 import (
-	"linkboards/internal/auth"
-	"linkboards/internal/links/application"
-	fs "linkboards/internal/links/datastore/firestore"
-	"linkboards/internal/links/datastore/inmem"
-	"linkboards/internal/links/domain"
-	"linkboards/internal/links/transport"
+	"github.com/d39b/linkboards/internal/auth"
+	"github.com/d39b/linkboards/internal/links/application"
+	fs "github.com/d39b/linkboards/internal/links/datastore/firestore"
+	"github.com/d39b/linkboards/internal/links/datastore/inmem"
+	"github.com/d39b/linkboards/internal/links/domain"
+	"github.com/d39b/linkboards/internal/links/transport"
 
 	e "github.com/d39b/kit/endpoint"
 	"github.com/d39b/kit/errors"

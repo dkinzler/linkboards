@@ -1,8 +1,9 @@
 package inmem
 
 import (
-	"linkboards/internal/boards/datastore"
 	"testing"
+
+	"github.com/d39b/linkboards/internal/boards/datastore"
 )
 
 func TestInmemBoardDataStore(t *testing.T) {

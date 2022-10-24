@@ -1,4 +1,4 @@
-module linkboards
+module github.com/d39b/linkboards
 
 go 1.19
 

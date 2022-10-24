@@ -3,12 +3,13 @@ package api
 import (
 	"errors"
 	"fmt"
-	"linkboards/tools/client"
 	"log"
 	"math/rand"
 	"os"
 	"sort"
 	"testing"
+
+	"github.com/d39b/linkboards/tools/client"
 
 	"github.com/d39b/kit/firebase/emulator"
 

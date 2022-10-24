@@ -2,9 +2,10 @@ package domain
 
 import (
 	"context"
-	"linkboards/internal/auth"
 	"testing"
 	stdtime "time"
+
+	"github.com/d39b/linkboards/internal/auth"
 
 	"github.com/d39b/kit/errors"
 	"github.com/d39b/kit/time"

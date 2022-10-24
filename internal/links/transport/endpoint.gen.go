@@ -3,7 +3,8 @@ package transport
 
 import (
 	"context"
-	application "linkboards/internal/links/application"
+
+	application "github.com/d39b/linkboards/internal/links/application"
 
 	e "github.com/d39b/kit/endpoint"
 	endpoint "github.com/go-kit/kit/endpoint"

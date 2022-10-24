@@ -2,7 +2,8 @@ package firestore
 
 import (
 	"context"
-	"linkboards/internal/links/domain"
+
+	"github.com/d39b/linkboards/internal/links/domain"
 
 	"github.com/d39b/kit/errors"
 	fs "github.com/d39b/kit/firebase/firestore"

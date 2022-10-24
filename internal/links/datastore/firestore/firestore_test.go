@@ -2,11 +2,12 @@ package firestore
 
 import (
 	"context"
-	"linkboards/internal/links/datastore"
 	"log"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/d39b/linkboards/internal/links/datastore"
 
 	"github.com/d39b/kit/firebase"
 	"github.com/d39b/kit/firebase/emulator"

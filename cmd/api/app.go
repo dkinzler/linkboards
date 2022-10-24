@@ -13,10 +13,10 @@ import (
 	fb "firebase.google.com/go/v4"
 	fbauth "firebase.google.com/go/v4/auth"
 
-	"linkboards/internal/auth/middleware"
-	"linkboards/internal/auth/store"
-	"linkboards/internal/boards"
-	"linkboards/internal/links"
+	"github.com/d39b/linkboards/internal/auth/middleware"
+	"github.com/d39b/linkboards/internal/auth/store"
+	"github.com/d39b/linkboards/internal/boards"
+	"github.com/d39b/linkboards/internal/links"
 
 	lfb "github.com/d39b/kit/firebase"
 
@@ -137,19 +137,6 @@ func runApp(config Config) error {
 
 	boardComponent.RegisterHttpHandlers(router, opts)
 	linksComponent.RegisterHttpHandlers(router, opts)
-
-	/*
-		//CORS stuff
-
-		router.Use(mux.CORSMethodMiddleware(router))
-		//TODO we might not need all these headers for every request, but is there a better way? maybe write different complete middlewares for different cases and then add them to handlers like the auth middleware
-		corsCred := handlers.AllowCredentials()
-		//TODO change this to appropriate domains to prevent cross site scripting
-		corsOrigins := handlers.AllowedOrigins([]string{"*"})
-		corsMethods := handlers.AllowedMethods([]string{"PATCH", "DELETE", "GET", "POST", "OPTIONS"})
-		corsHeaders := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
-		router.Use(handlers.CORS(corsCred, corsOrigins, corsMethods, corsHeaders))
-	*/
 
 	err = transport.RunDefaultServer(
 		router,

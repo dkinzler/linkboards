@@ -3,8 +3,9 @@ package transport
 
 import (
 	"context"
-	application "linkboards/internal/links/application"
 	"net/http"
+
+	application "github.com/d39b/linkboards/internal/links/application"
 
 	t "github.com/d39b/kit/transport/http"
 	kithttp "github.com/go-kit/kit/transport/http"

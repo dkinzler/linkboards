@@ -2,10 +2,11 @@ package store
 
 import (
 	"context"
-	"linkboards/internal/auth"
-	"linkboards/internal/boards/datastore/inmem"
-	"linkboards/internal/boards/domain"
 	"testing"
+
+	"github.com/d39b/linkboards/internal/auth"
+	"github.com/d39b/linkboards/internal/boards/datastore/inmem"
+	"github.com/d39b/linkboards/internal/boards/domain"
 
 	"github.com/d39b/kit/errors"
 	"github.com/stretchr/testify/assert"

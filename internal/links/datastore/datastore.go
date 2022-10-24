@@ -2,9 +2,10 @@ package datastore
 
 import (
 	"context"
-	"linkboards/internal/links/domain"
 	"testing"
 	"time"
+
+	"github.com/d39b/linkboards/internal/links/domain"
 
 	"github.com/d39b/kit/errors"
 	ctime "github.com/d39b/kit/time"

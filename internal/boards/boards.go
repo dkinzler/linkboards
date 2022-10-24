@@ -1,13 +1,13 @@
 package boards
 
 import (
-	"linkboards/internal/auth"
-	"linkboards/internal/auth/store"
-	"linkboards/internal/boards/application"
-	fs "linkboards/internal/boards/datastore/firestore"
-	"linkboards/internal/boards/datastore/inmem"
-	"linkboards/internal/boards/domain"
-	"linkboards/internal/boards/transport"
+	"github.com/d39b/linkboards/internal/auth"
+	"github.com/d39b/linkboards/internal/auth/store"
+	"github.com/d39b/linkboards/internal/boards/application"
+	fs "github.com/d39b/linkboards/internal/boards/datastore/firestore"
+	"github.com/d39b/linkboards/internal/boards/datastore/inmem"
+	"github.com/d39b/linkboards/internal/boards/domain"
+	"github.com/d39b/linkboards/internal/boards/transport"
 
 	e "github.com/d39b/kit/endpoint"
 	"github.com/d39b/kit/errors"

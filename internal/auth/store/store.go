@@ -2,8 +2,9 @@ package store
 
 import (
 	"context"
-	"linkboards/internal/auth"
-	"linkboards/internal/boards/domain"
+
+	"github.com/d39b/linkboards/internal/auth"
+	"github.com/d39b/linkboards/internal/boards/domain"
 
 	"github.com/d39b/kit/errors"
 )

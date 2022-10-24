@@ -2,8 +2,9 @@ package application
 
 import (
 	"context"
-	"linkboards/internal/auth"
-	"linkboards/internal/links/domain"
+
+	"github.com/d39b/linkboards/internal/auth"
+	"github.com/d39b/linkboards/internal/links/domain"
 
 	"github.com/d39b/kit/errors"
 )
@@ -192,9 +193,9 @@ func (svc *linkApplicationService) DeleteLink(ctx context.Context, boardId strin
 	}
 
 	// TODO It could happen that the user is no longer a member of the board the link is in.
-	// Should they then be able to delte the link or not?
+	// Should they then be able to delete the link or not?
 
-	// if the user that made the request is not the user that created the link
+	// If the user that made the request is not the user that created the link
 	// they need the delete link scope
 	if link.Link.CreatedBy.UserId != user.UserId {
 		az, err := svc.authChecker.GetAuthorization(ctx, boardId, user.UserId)
