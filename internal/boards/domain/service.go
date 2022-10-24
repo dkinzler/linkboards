@@ -29,7 +29,7 @@ const (
 )
 
 // BoardService implements operations on boards, users and invites.
-// It uses an implementaiton of BoardDataStore to read and persist boards/users/invites,
+// It uses an implementation of BoardDataStore to read and persist boards/users/invites,
 // and an implementation of EventPublisher to make events available to other components/systems.
 // BoardService does not perform authorization, that should be handled in application services using this package.
 //
@@ -37,11 +37,11 @@ const (
 // E.g. if two operations try to concurrently create a new invite for the same user on the same board, at most one of the operations should succeed, since for a board there should be at most one invite for a user at any given time.
 // BoardService guarantees consistency by using the optimistic transaction capabilities required of any BoardDataStore implementation.
 //
-// BoardService handles transactions explicitely, it tells BoardDataStore what data it expects to have not been changed.
-// Instead it could also be implemented implicitely. For operations that read data, BoardDataStore could store transaction expectations in the context value (see the "session" package for a possible implementation), and read/verify those expecatations
+// BoardService handles transactions explicitly, it tells BoardDataStore what data it expects to have not been changed.
+// Instead it could also be implemented implicitly. For operations that read data, BoardDataStore could store transaction expectations in the context value (see the "session" package for a possible implementation), and read/verify those expecatations
 // when modifying data. This works because in methods of BoardService we always pass the same context value to invocations of BoardDataStore methods.
 // With this approach we could change the BoardDataStore interface to no longer return/accept TransactionExpectation values.
-// A drawback of the implict approach is that it might not be as obvious or easy to understand for someone reading the BoardService code, what kind of consistency is guaranteed/what data is changed transactionally.
+// A drawback of the implicit approach is that it might not be as obvious or easy to understand for someone reading the BoardService code, what kind of consistency is guaranteed/what data is changed transactionally.
 // Note that both the explicit and implicit approach described here still implement optmistic transactions, the only difference is where the transaction expectations are created/kept.
 // For the given application the number of users of a board is bounded, which in practice makes it very unlikely that concurrent operations that could lead to inconsistencies even happen that often.
 //

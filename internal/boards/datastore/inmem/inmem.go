@@ -44,7 +44,7 @@ func newError(inner error, code errors.ErrorCode) errors.Error {
 	return errors.New(inner, "InmemBoardDataStore", code)
 }
 
-// should only be used from within another function that has aquired a read lock
+// should only be used from within another function that has acquired a read lock
 func (s *inmemBoardDataStore) transactionExpectation(boardId string) domain.TransactionExpectation {
 	version, ok := s.version[boardId]
 	if !ok {

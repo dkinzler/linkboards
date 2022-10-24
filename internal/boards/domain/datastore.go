@@ -98,7 +98,7 @@ func (u *DatastoreBoardUpdate) IsEmpty() bool {
 //   - Board() also returns a value implementing TransactionExpectation, it will typically contain the last time the
 //     board (and/or its users/invites) was modified.
 //   - When we want to update/modify the board (and/or its users/invites), we can pass the TransactionExpectation back to the
-//     UpdateBoard() method (as part of the "update" paramter).
+//     UpdateBoard() method (as part of the "update" parameter).
 //   - A correct data store implementation will have to guarantee that the update/modification is only performed
 //     if the board (and/or users/invites) was not modified since the time defined in the TransactionExpectation value.
 //

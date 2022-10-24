@@ -97,6 +97,7 @@ func TestBoardUserCreation(t *testing.T) {
 	user, err = NewBoardUser(User{UserId: "uid", Name: "Testi Tester"}, auth.BoardRoleViewer, User{UserId: "abc", Name: "xyz"})
 	a.Nil(err)
 	err = user.ChangeRole(auth.BoardRoleEditor, User{UserId: "123"})
+	a.Nil(err)
 	a.Equal(auth.BoardRoleEditor, user.Role)
 	a.Equal(User{UserId: "123"}, user.ModifiedBy)
 }

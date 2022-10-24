@@ -139,6 +139,7 @@ func DatastoreTest(ds domain.LinkDataStore, t *testing.T) {
 		UserId: "12",
 		Rating: 1,
 	})
+	a.Nil(err)
 	err = ds.UpdateRating(ctx, "1", "2", domain.UserLinkRating{
 		UserId: "13",
 		Rating: 1,
