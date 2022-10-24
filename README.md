@@ -7,11 +7,12 @@ Links can be posted to boards, users can rate and discover them using queries.
 The application is built using the [Go kit](https://github.com/go-kit/kit) and [github.com/d39b/kit](https://github.com/d39b/kit) frameworks.
 It is inteded to showcase Go development best practices:
 
-- Hexagonal architecture that makes it easy to integrate new dependencies. 
-- Monolithic application that nevertheless has modularity in mind. Built to be separable into multiple services if necessary.
-- Built for scalability, consisteny in the face of concurrent requests.
-- Local in-memory versions of dependencies like data stores that allows the application to be easily run locally for development and testing.
-- Built for the cloud with Firebase Authentication and Firestore
+- Design
+	- Modular monolithic application ready to be separated into different services if it becomes necessary 
+    - Hexagonal architecture makes it easy to change and integrate dependencies like data stores
+	- With API scalability in mind: consistent while running multiple instances and concurrent requests
+- Run in the cloud with Firebase Authentication and Firestore
+- Local/in-memory versions of dependencies like data stores that allows the application to be easily run locally for development and testing.
 - Endpoint and http boilerplate code is fully auto-generated using package [github.com/d39b/kit/codegen](https://pkg.go.dev/github.com/d39b/kit/codegen)
 - Unit, integration and end-to-end/API testing
 - ...
