@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  title: Link boards
+  title: Linkboards
   version: 1.0.0
   description: | 
     An API for sharing links.
@@ -506,6 +506,7 @@ paths:
   /boards/{boardId}/links/{linkId}/ratings:
     post:
       summary: Rate a link
+      description: Update/create a link rating. The only valid ratings are -1 (downvote) and 1 (upvote).
       tags:
         - Links
       parameters:
