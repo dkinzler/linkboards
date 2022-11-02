@@ -73,3 +73,37 @@ tasks:
       FIRESTORE_EMULATOR_HOST: localhost:8080
     cmds:
       - go run ./tools/firebase_emulator/helpers {{.CLI_ARGS}}
+
+  docker-build:
+    cmds:
+      - docker build -t {{default .DEFAULT_TAG .TAG}} .
+    vars:
+      DEFAULT_TAG: "linkboards-api:latest"
+  
+  # Deploy the API using Google Cloud Run
+  # Note that for this to work you will have to setup a google cloud project,
+  # build and upload a docker image of this application to a image repository,
+  # possibly setup Firebase services, etc..
+  gcloud-deploy:
+    cmds:
+      - | 
+        gcloud run deploy {{.SERVICE}} \
+          --image {{.IMAGE}} \
+          --allow-unauthenticated \
+          --memory {{.MEMORY}} \
+          --cpu {{.CPU}} \
+          --concurrency {{.CONCURRENCY}} \
+          --max-instances {{.MAXINSTANCES}} \
+          --region {{.REGION}} \
+          --project {{.PROJECT_ID}} \
+    vars:
+      # set this to your google cloud project id
+      PROJECT_ID: example-project
+      # set this to the path of the docker image
+      IMAGE: europe-west3-docker.pkg.dev/example/linkboards-api:latest
+      SERVICE: linkboardsapi
+      REGION: europe-west3
+      MEMORY: 512M
+      CPU: 1
+      CONCURRENCY: 80
+      MAXINSTANCES: 4
