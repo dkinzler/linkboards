@@ -61,12 +61,24 @@ func NewFakeAuthEndpointMiddleware() endpoint.Middleware {
 }
 
 func NewFirebaseAuthEndpointMiddleware(authClient *fbauth.Client, requireVerifiedEmail bool) endpoint.Middleware {
-	fbAuthChecker := lfbauth.NewAuthChecker(authClient, requireVerifiedEmail, nil)
+	fbAuthChecker := lfbauth.NewAuthChecker(authClient, requireVerifiedEmail, func(m map[string]interface{}) (interface{}, error) {
+		name, ok := m["name"]
+		if ok {
+			return name, nil
+		}
+		return nil, nil
+	})
 	return lfbauth.NewAuthEndpointMiddleware(
 		fbAuthChecker,
 		func(ctx context.Context, u lfbauth.User) context.Context {
+			var name string
+			m, ok := u.CustomClaims.(string)
+			if ok {
+				name = m
+			}
 			return auth.ContextWithUser(ctx, auth.User{
 				UserId: u.Uid,
+				Name:   name,
 			})
 		},
 	)
