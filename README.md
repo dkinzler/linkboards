@@ -58,6 +58,20 @@ To create a Firebase Authentication user and obtain a JWT token that can be used
 task firebase-helpers -- login --email "test@test.de" --pasword "test123"
 ```
 
+### Run with Docker
+
+To build a Docker image tagged as `linkboardsapi`, run:
+
+```Shell
+TAG=linkboardsapi task docker-build
+```
+
+Run the application using the image:
+
+```Shell
+docker run -it -p 9004:9004 linkboardsapi --inmem --debug --port 9004
+```
+
 ## Testing
 
 Run Go unit tests:
