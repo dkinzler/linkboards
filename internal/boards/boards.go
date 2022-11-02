@@ -19,21 +19,28 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Contains all the necessary elements for running the boards service, i.e. the
+// boards part of the API.
 type Component struct {
 	ApplicationService application.BoardApplicationService
 	DataStore          domain.BoardDataStore
 	Endpoints          transport.EndpointSet
 }
 
+// Configures a boards component.
 type Config struct {
 	Logger *log.Logger
 
-	UseInmemDataStore  bool
-	FirestoreConfig    *FirestoreConfig
+	// If true, use an in-memory data store.
+	UseInmemDataStore bool
+	// Used to create a firestore data store if UseInmemDataStore is set to false.
+	FirestoreConfig *FirestoreConfig
+	// AuthorizationStore used to perform authorization in the application service.
 	AuthorizationStore auth.AuthorizationStore
 
 	// Middlewares that should be applied to all endpoints
-	Middlewares    []endpoint.Middleware
+	Middlewares []endpoint.Middleware
+	// Authentication middleware for endpoints.
 	AuthMiddleware endpoint.Middleware
 	// Whether to add the logging middleware from the "internal/pkg/endpoint" package to every endpoint.
 	// It logs errors from the underlying application service, not any errors produced by endpoint middlewares.

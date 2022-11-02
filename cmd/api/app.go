@@ -29,21 +29,40 @@ import (
 	"github.com/d39b/kit/log"
 )
 
-const Version string = "0.1.6"
-
+// Configures the application.
+//
+// Which dependencies are used and how they are created is determined in-order as follows:
+//   - If UseInmemDependencies is true, use local in-memory dependencies.
+//   - If UseFirebaseEmulators is true, attempt to use firebase emulators.
+//   - If FirebaseServiceAccountFile is not empty, attempt to use it to connect to firebase services,
+//     Firebase Authentication for authentication and Firestore for any data stores.
+//   - Attempt to use application default credentials to connect to firebase services.
+//     These are usually set automatically if the application is run in a google cloud product like Cloud Run or App Engine.
 type Config struct {
-	Port    int
+	// Port the API will be reachable at.
+	Port int
+	// Address the API will be reachable at, usually empty to be reachable
+	// on all network interfaces of the system.
 	Address string
 
-	UseInmemDatastores bool
+	// If true, use in memory dependencies like data stores and authentication mechanism.
+	UseInmemDependencies bool
 
-	UseFirebaseEmulators       bool
-	FirebaseProjectId          string
+	// If true, attempt to connect to firebase emulators to use for authentication and data stores.
+	// Note that the emulators will have to be running already.
+	UseFirebaseEmulators bool
+	FirebaseProjectId    string
+	// If not empty, try to connect to firebase services using the given service account file.
 	FirebaseServiceAccountFile string
 
+	// In debug mode:
+	//   - log messages with level Debug will be output
+	//   - log messages will be pretty printed, i.e. as JSON with multiple indented lines
 	DebugMode bool
 }
 
+// Runs the application using the given config.
+// Will create a boards and links component and expose their endpoints using a http server.
 func runApp(config Config) error {
 	var options []log.Option
 	if config.DebugMode {
@@ -60,7 +79,7 @@ func runApp(config Config) error {
 	var fbFirestoreClient *fbfirestore.Client
 	var err error
 
-	if !config.UseInmemDatastores {
+	if !config.UseInmemDependencies {
 		_, fbAuthClient, fbFirestoreClient, err = initFirebase(config)
 		if err != nil {
 			logger.Log("message", "could not init firebase", "error", err)
@@ -70,7 +89,7 @@ func runApp(config Config) error {
 
 	// endpoint authentication middleware
 	var authMiddleware endpoint.Middleware
-	if config.UseInmemDatastores {
+	if config.UseInmemDependencies {
 		authMiddleware = middleware.NewFakeAuthEndpointMiddleware()
 	} else {
 		authMiddleware = middleware.NewFirebaseAuthEndpointMiddleware(fbAuthClient, false)
@@ -82,7 +101,7 @@ func runApp(config Config) error {
 		AuthMiddleware:       authMiddleware,
 		UseLoggingMiddleware: true,
 	}
-	if config.UseInmemDatastores {
+	if config.UseInmemDependencies {
 		boardsConfig.UseInmemDataStore = true
 	} else {
 		boardsConfig.FirestoreConfig = &boards.FirestoreConfig{
@@ -104,7 +123,7 @@ func runApp(config Config) error {
 		UseLoggingMiddleware: true,
 		AuthorizationStore:   authorizationStore,
 	}
-	if config.UseInmemDatastores {
+	if config.UseInmemDependencies {
 		linksConfig.UseInmemDataStore = true
 	} else {
 		linksConfig.FirestoreConfig = &links.FirestoreConfig{
@@ -123,7 +142,7 @@ func runApp(config Config) error {
 	}
 
 	var beforeFunc kithttp.RequestFunc
-	if config.UseInmemDatastores {
+	if config.UseInmemDependencies {
 		beforeFunc = kithttp.PopulateRequestContext
 	} else {
 		beforeFunc = kitjwt.HTTPToContext()
