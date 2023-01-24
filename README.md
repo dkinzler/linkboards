@@ -8,7 +8,7 @@ Users can create link boards and invite other users to join.
 Links can be posted to boards, users can rate and discover them using queries.
 
 The application is built using the [Go kit](https://github.com/go-kit/kit) and [github.com/d39b/kit](https://github.com/d39b/kit) frameworks.
-It is inteded to showcase Go development best practices:
+It is intended to showcase Go development best practices:
 
 - Design
 	- Modular monolithic application ready to be separated into different services if it becomes necessary 
@@ -55,7 +55,7 @@ Note that for this to work you need to have the [Firebase CLI](https://firebase.
 To create a Firebase Authentication user and obtain a JWT token that can be used to authenticate API requests, run e.g.: 
 
 ```Shell
-task firebase-helpers -- login --email "test@test.de" --pasword "test123"
+task firebase-helpers -- login --email "test@test.com" --pasword "test123"
 ```
 
 ### Run with Docker
@@ -80,7 +80,7 @@ Run Go unit tests:
 task test
 ```
 
-Run Go tests that require Firebase emulators:
+Run integration tests that require Firebase emulators:
 
 ```Shell
 task test-emulators
