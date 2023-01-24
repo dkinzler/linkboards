@@ -93,7 +93,7 @@ type Board struct {
 }
 
 type BoardEdit struct {
-	// Use pointers here to differntiate between an empty value and value that was not provided.
+	// Use pointers here to differentiate between an empty value and value that was not provided.
 	// E.g. assume the type of the name and description fields were string and we unmarshal a json http request body
 	// into a BoardEdit value. The following to json bodies would yield the same BoardEdit value:
 	//   - {"name":"abc"}, the user wants to change the name but leave the description field unchanged

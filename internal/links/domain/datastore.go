@@ -7,7 +7,7 @@ import "context"
 // Note that we do not aggregate the user ratings in the domain layer. Instead we expect that the data store implementation is capable
 // of computing a Rating value that aggregates all the user ratings.
 // How this is done is up to the implementation. One could e.g. store the aggregate explicitly and update it every time a user rating changes
-// or it could be computed from all the user ratings and cached whenever required.
+// or it could be computed from all the user ratings and cached.
 type LinkDataStore interface {
 	CreateLink(ctx context.Context, boardId string, link Link) error
 	DeleteLink(ctx context.Context, boardId string, linkId string) error

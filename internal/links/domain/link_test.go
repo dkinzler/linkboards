@@ -57,10 +57,16 @@ func TestLinkCreation(t *testing.T) {
 	a.True(errors.HasPublicCode(err, errUrlEmpty))
 	a.Empty(link)
 
+	// invalid url
+	link, err = svc.CreateLink(ctx, "b-123", "A title", "$%&/\\:\\12$4%", User{UserId: "u-123"})
+	a.NotNil(err)
+	a.True(errors.HasPublicCode(err, errUrlInvalid))
+	a.Empty(link)
+
 	// invalid url, no https
 	link, err = svc.CreateLink(ctx, "b-123", "A title", "http://example.com", User{UserId: "u-123"})
 	a.NotNil(err)
-	a.True(errors.HasPublicCode(err, errUrlInvalid))
+	a.True(errors.HasPublicCode(err, errUrlInsecure))
 	a.Empty(link)
 
 	// this should work

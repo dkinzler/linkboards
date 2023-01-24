@@ -6,7 +6,7 @@ import (
 
 // Scopes are the most fine-grained units of permission and are defined
 // directly in the components/bounded contexts that use them.
-// They are usually named by combining the component and action/permission name, e.g. "comments/create" or "comments/delete".
+// They are usually named by combining the component and action/permission name, e.g. "comments:create" or "comments:delete".
 type Scope string
 
 // A role comprises a set of scopes.

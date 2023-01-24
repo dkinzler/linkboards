@@ -19,7 +19,7 @@ func UserFromContext(ctx context.Context) (User, bool) {
 	return user, ok
 }
 
-// Used to add a user to context, from which it can be retrieved by the application service.
+// Used to add a user to context, from which it can be retrieved by an application service.
 // E.g. a transport or endpoint middleware could decode a JWT token contained in an http request header and
 // use it to create a User instance.
 func ContextWithUser(ctx context.Context, user User) context.Context {

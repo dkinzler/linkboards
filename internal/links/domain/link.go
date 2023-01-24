@@ -14,6 +14,7 @@ const (
 	errTitleTooLong
 	errUrlEmpty
 	errUrlInvalid
+	errUrlInsecure
 	errInvalidRating
 )
 
@@ -40,6 +41,18 @@ func newError(inner error, code errors.ErrorCode) errors.Error {
 const maxTitleLength = 200
 
 func (l *Link) IsValid() error {
+	if err := l.isTitleValid(); err != nil {
+		return err
+	}
+
+	if err := l.isUrlValid(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (l *Link) isTitleValid() error {
 	if len(l.Title) == 0 {
 		return newError(nil, errors.InvalidArgument).WithPublicMessage("title cannot be empty").WithPublicCode(errTitleEmpty)
 	}
@@ -48,6 +61,10 @@ func (l *Link) IsValid() error {
 		return newError(nil, errors.InvalidArgument).WithPublicMessage("title too long").WithPublicCode(errTitleTooLong)
 	}
 
+	return nil
+}
+
+func (l *Link) isUrlValid() error {
 	if len(l.Url) == 0 {
 		return newError(nil, errors.InvalidArgument).WithPublicMessage("url cannot be empty").WithPublicCode(errUrlEmpty)
 	}
@@ -60,8 +77,9 @@ func (l *Link) IsValid() error {
 	// In an actual application we would probably perform other validations as well, e.g.
 	// filtering out certain hosts (e.g. spam) ...
 	if u.Scheme != "https" {
-		return newError(nil, errors.InvalidArgument).WithPublicMessage("invalid url").WithPublicCode(errUrlInvalid)
+		return newError(nil, errors.InvalidArgument).WithPublicMessage("insecure url").WithPublicCode(errUrlInsecure)
 	}
+
 	return nil
 }
 

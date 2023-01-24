@@ -29,8 +29,8 @@ const (
 	createInviteScope                   = "boards:invite"
 	deleteInviteScope                   = "boards:deleteInvite"
 	respondToInviteScope                = "boards:respondToInvite"
-	listUserInvitesScope                = "board:listUserInvites"
-	removeUserFromBoardScope            = "board:removeUser"
+	listUserInvitesScope                = "boards:listUserInvites"
+	removeUserFromBoardScope            = "boards:removeUser"
 	editBoardUserScope                  = "boards:editUsers"
 )
 

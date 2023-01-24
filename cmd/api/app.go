@@ -24,7 +24,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
 
-	transport "github.com/d39b/kit/transport/http"
+	dhttp "github.com/d39b/kit/transport/http"
 
 	"github.com/d39b/kit/log"
 )
@@ -138,7 +138,7 @@ func runApp(config Config) error {
 
 	router := mux.NewRouter()
 	httpErrorEncoder := func(ctx context.Context, err error, w http.ResponseWriter) {
-		transport.EncodeError(ctx, err, w)
+		dhttp.EncodeError(ctx, err, w)
 	}
 
 	var beforeFunc kithttp.RequestFunc
@@ -151,16 +151,16 @@ func runApp(config Config) error {
 	opts := []kithttp.ServerOption{
 		kithttp.ServerBefore(beforeFunc),
 		kithttp.ServerErrorEncoder(httpErrorEncoder),
-		kithttp.ServerErrorHandler(transport.NewLogErrorHandler(logger)),
+		kithttp.ServerErrorHandler(dhttp.NewLogErrorHandler(logger)),
 	}
 
 	boardComponent.RegisterHttpHandlers(router, opts)
 	linksComponent.RegisterHttpHandlers(router, opts)
 
-	err = transport.RunDefaultServer(
+	err = dhttp.RunDefaultServer(
 		router,
 		nil,
-		transport.NewServerConfig().
+		dhttp.NewServerConfig().
 			WithAddress(config.Address).
 			WithPort(config.Port).
 			WithOnShutdownFunc(func(err error) {

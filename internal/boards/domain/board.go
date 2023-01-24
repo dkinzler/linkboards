@@ -39,8 +39,8 @@ type Board struct {
 	// Note that the User value contains the id and name of the user.
 	// While the id should be unique and never change, a user usually has the ability to change their name.
 	// The name of the user kept with this board would then no longer be up to date.
-	// If we don't want to accept these inconsistencies, we would need to store just the user id and every time a user's name is required
-	// we would have to read the latest value from the authentication system manages users and their names.
+	// If we don't want to accept these inconsistencies, we would either have to retrieve the name for a given user id separately or
+	// update the name here every time it changes.
 	CreatedBy User
 	// Last time the board was modified (e.g. the name or description changed) as Unix time (nanoseconds)
 	ModifiedTime int64
@@ -79,11 +79,13 @@ func NewBoard(name, description string, user User) (Board, error) {
 }
 
 func (b *Board) IsValid() error {
-	err := b.IsNameValid()
-	if err != nil {
+	if err := b.IsNameValid(); err != nil {
 		return err
 	}
-	return b.IsDescriptionValid()
+	if err := b.IsDescriptionValid(); err != nil {
+		return err
+	}
+	return nil
 }
 
 const nameMaxLength = 100
