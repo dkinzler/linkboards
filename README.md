@@ -1,13 +1,13 @@
 # Linkboards
 
-![GitHub Workflow Status](https://github.com/d39b/linkboards/actions/workflows/tests.yml/badge.svg)
-[![Go Report Card](https://goreportcard.com/badge/github.com/d39b/linkboards)](https://goreportcard.com/report/github.com/d39b/linkboards)
+![GitHub Workflow Status](https://github.com/dkinzler/linkboards/actions/workflows/tests.yml/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dkinzler/linkboards)](https://goreportcard.com/report/github.com/dkinzler/linkboards)
 
 A sample API application for sharing links implemented in Go.
 Users can create link boards and invite other users to join.
 Links can be posted to boards, users can rate and discover them using queries.
 
-The application is built using the [Go kit](https://github.com/go-kit/kit) and [github.com/d39b/kit](https://github.com/d39b/kit) frameworks.
+The application is built using the [Go kit](https://github.com/go-kit/kit) and [github.com/dkinzler/kit](https://github.com/dkinzler/kit) frameworks.
 It is intended to showcase Go development best practices:
 
 - Design
@@ -16,11 +16,11 @@ It is intended to showcase Go development best practices:
 	- With API scalability in mind: consistent while running multiple instances and concurrent requests
 - Run in the cloud with Firebase Authentication and Firestore
 - Local/in-memory versions of dependencies like data stores that allows the application to be easily run locally for development and testing.
-- Endpoint and http boilerplate code is fully auto-generated using package [github.com/d39b/kit/codegen](https://pkg.go.dev/github.com/d39b/kit/codegen)
+- Endpoint and http boilerplate code is fully auto-generated using package [github.com/dkinzler/kit/codegen](https://pkg.go.dev/github.com/dkinzler/kit/codegen)
 - Unit, integration and end-to-end/API testing
 - ...
 
-A more in-depth description of the API is provided by the [OpenAPI documentation](https://d39b.github.io/linkboards/).
+A more in-depth description of the API is provided by the [OpenAPI documentation](https://dkinzler.github.io/linkboards/).
 
 A discussion of the architecture of the app can be found [here](architecture.md).
 

@@ -3,8 +3,8 @@ package application
 import (
 	"context"
 
-	"github.com/d39b/linkboards/internal/auth"
-	"github.com/d39b/linkboards/internal/boards/domain"
+	"github.com/dkinzler/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/boards/domain"
 )
 
 func userFromContext(ctx context.Context) (auth.User, bool) {

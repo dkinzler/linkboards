@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/d39b/kit/firebase/emulator"
+	"github.com/dkinzler/kit/firebase/emulator"
 
 	cli "github.com/urfave/cli/v2"
 )

@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/d39b/kit/errors"
+	"github.com/dkinzler/kit/errors"
 	"github.com/stretchr/testify/assert"
 )
 

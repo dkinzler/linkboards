@@ -1,8 +1,8 @@
 package application
 
 import (
-	"github.com/d39b/linkboards/internal/auth"
-	"github.com/d39b/linkboards/internal/links/domain"
+	"github.com/dkinzler/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/links/domain"
 )
 
 func toDomainUser(u auth.User) domain.User {

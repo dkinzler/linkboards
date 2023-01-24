@@ -1,16 +1,16 @@
 package links
 
 import (
-	"github.com/d39b/linkboards/internal/auth"
-	"github.com/d39b/linkboards/internal/links/application"
-	fs "github.com/d39b/linkboards/internal/links/datastore/firestore"
-	"github.com/d39b/linkboards/internal/links/datastore/inmem"
-	"github.com/d39b/linkboards/internal/links/domain"
-	"github.com/d39b/linkboards/internal/links/transport"
+	"github.com/dkinzler/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/links/application"
+	fs "github.com/dkinzler/linkboards/internal/links/datastore/firestore"
+	"github.com/dkinzler/linkboards/internal/links/datastore/inmem"
+	"github.com/dkinzler/linkboards/internal/links/domain"
+	"github.com/dkinzler/linkboards/internal/links/transport"
 
-	e "github.com/d39b/kit/endpoint"
-	"github.com/d39b/kit/errors"
-	"github.com/d39b/kit/log"
+	e "github.com/dkinzler/kit/endpoint"
+	"github.com/dkinzler/kit/errors"
+	"github.com/dkinzler/kit/log"
 
 	"cloud.google.com/go/firestore"
 	"github.com/go-kit/kit/endpoint"

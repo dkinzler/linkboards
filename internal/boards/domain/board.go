@@ -7,11 +7,11 @@ package domain
 import (
 	stdtime "time"
 
-	"github.com/d39b/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/auth"
 
-	"github.com/d39b/kit/errors"
-	"github.com/d39b/kit/time"
-	"github.com/d39b/kit/uuid"
+	"github.com/dkinzler/kit/errors"
+	"github.com/dkinzler/kit/time"
+	"github.com/dkinzler/kit/uuid"
 )
 
 // User represents the information about a user we need in this context.

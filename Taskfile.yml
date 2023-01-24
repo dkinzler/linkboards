@@ -3,7 +3,7 @@ version: '3'
 tasks:
   codegen:
     cmds:
-      - go run github.com/d39b/kit/codegen@latest {{.CLI_ARGS}}
+      - go run github.com/dkinzler/kit/codegen@latest {{.CLI_ARGS}}
 
   test:
     cmds:

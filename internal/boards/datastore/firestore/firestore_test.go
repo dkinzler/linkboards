@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/d39b/linkboards/internal/boards/datastore"
+	"github.com/dkinzler/linkboards/internal/boards/datastore"
 
-	"github.com/d39b/kit/firebase"
-	"github.com/d39b/kit/firebase/emulator"
+	"github.com/dkinzler/kit/firebase"
+	"github.com/dkinzler/kit/firebase/emulator"
 
 	"cloud.google.com/go/firestore"
 	"github.com/stretchr/testify/assert"

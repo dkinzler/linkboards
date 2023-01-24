@@ -4,10 +4,10 @@ import (
 	"context"
 	"sort"
 
-	"github.com/d39b/linkboards/internal/auth"
-	"github.com/d39b/linkboards/internal/boards/domain"
+	"github.com/dkinzler/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/boards/domain"
 
-	"github.com/d39b/kit/errors"
+	"github.com/dkinzler/kit/errors"
 )
 
 // @Kit{"endpointPackage":"internal/boards/transport", "httpPackage":"internal/boards/transport"}

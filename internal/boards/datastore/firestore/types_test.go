@@ -3,7 +3,7 @@ package firestore
 import (
 	"testing"
 
-	"github.com/d39b/linkboards/internal/boards/domain"
+	"github.com/dkinzler/linkboards/internal/boards/domain"
 
 	"github.com/stretchr/testify/assert"
 )

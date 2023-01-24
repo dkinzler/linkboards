@@ -7,9 +7,9 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/d39b/linkboards/internal/links/domain"
+	"github.com/dkinzler/linkboards/internal/links/domain"
 
-	"github.com/d39b/kit/errors"
+	"github.com/dkinzler/kit/errors"
 )
 
 type linkWithRatings struct {

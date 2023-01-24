@@ -1,6 +1,6 @@
 package firestore
 
-import "github.com/d39b/linkboards/internal/boards/domain"
+import "github.com/dkinzler/linkboards/internal/boards/domain"
 
 // We define separate types here, since the way we store the data in firestore
 // is slightly different from the domain types.

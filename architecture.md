@@ -53,7 +53,7 @@ The application layer might e.g. define an interface (port) for obtaining author
 
 The transport layer makes the methods of an application service available to the outside using JSON over HTTP.
 To this end the [Go kit](https://github.com/go-kit/kit) framework is used to wrap the methods of the application service using endpoints and HTTP handlers.
-Almost all of the code of the transport layer is auto-generated using the [github.com/d39b/kit/codegen](https://pkg.go.dev/github.com/d39b/kit/codegen) package.
+Almost all of the code of the transport layer is auto-generated using the [github.com/dkinzler/kit/codegen](https://pkg.go.dev/github.com/dkinzler/kit/codegen) package.
 
 The transport layer is just another example of an adapter (see the section above), since we could just as easily make the application services/API available using another transport protocol like gRPC.
 

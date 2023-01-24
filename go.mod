@@ -1,11 +1,11 @@
-module github.com/d39b/linkboards
+module github.com/dkinzler/linkboards
 
 go 1.19
 
 require (
 	cloud.google.com/go/firestore v1.7.0
 	firebase.google.com/go/v4 v4.9.0
-	github.com/d39b/kit v0.4.0
+	github.com/dkinzler/kit v0.4.1
 	github.com/go-kit/kit v0.12.0
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.0

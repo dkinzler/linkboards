@@ -5,9 +5,9 @@ import (
 	"encoding/base64"
 	"testing"
 
-	"github.com/d39b/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/auth"
 
-	"github.com/d39b/kit/errors"
+	"github.com/dkinzler/kit/errors"
 	"github.com/go-kit/kit/transport/http"
 	"github.com/stretchr/testify/assert"
 )

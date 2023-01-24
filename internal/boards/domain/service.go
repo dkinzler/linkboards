@@ -4,10 +4,10 @@ import (
 	"context"
 	stdtime "time"
 
-	"github.com/d39b/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/auth"
 
-	"github.com/d39b/kit/errors"
-	"github.com/d39b/kit/time"
+	"github.com/dkinzler/kit/errors"
+	"github.com/dkinzler/kit/time"
 )
 
 const (

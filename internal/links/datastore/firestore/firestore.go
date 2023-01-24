@@ -3,10 +3,10 @@ package firestore
 import (
 	"context"
 
-	"github.com/d39b/linkboards/internal/links/domain"
+	"github.com/dkinzler/linkboards/internal/links/domain"
 
-	"github.com/d39b/kit/errors"
-	fs "github.com/d39b/kit/firebase/firestore"
+	"github.com/dkinzler/kit/errors"
+	fs "github.com/dkinzler/kit/firebase/firestore"
 
 	"cloud.google.com/go/firestore"
 )

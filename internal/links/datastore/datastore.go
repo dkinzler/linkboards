@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/d39b/linkboards/internal/links/domain"
+	"github.com/dkinzler/linkboards/internal/links/domain"
 
-	"github.com/d39b/kit/errors"
-	ctime "github.com/d39b/kit/time"
+	"github.com/dkinzler/kit/errors"
+	ctime "github.com/dkinzler/kit/time"
 
 	"github.com/stretchr/testify/assert"
 )

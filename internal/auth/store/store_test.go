@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/d39b/linkboards/internal/auth"
-	"github.com/d39b/linkboards/internal/boards/datastore/inmem"
-	"github.com/d39b/linkboards/internal/boards/domain"
+	"github.com/dkinzler/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/boards/datastore/inmem"
+	"github.com/dkinzler/linkboards/internal/boards/domain"
 
-	"github.com/d39b/kit/errors"
+	"github.com/dkinzler/kit/errors"
 	"github.com/stretchr/testify/assert"
 )
 

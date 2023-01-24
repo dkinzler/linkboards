@@ -3,8 +3,9 @@ package transport
 
 import (
 	"context"
-	e "github.com/d39b/kit/endpoint"
-	application "github.com/d39b/linkboards/internal/boards/application"
+
+	e "github.com/dkinzler/kit/endpoint"
+	application "github.com/dkinzler/linkboards/internal/boards/application"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
 

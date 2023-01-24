@@ -3,11 +3,12 @@ package transport
 
 import (
 	"context"
-	t "github.com/d39b/kit/transport/http"
-	application "github.com/d39b/linkboards/internal/boards/application"
+	"net/http"
+
+	t "github.com/dkinzler/kit/transport/http"
+	application "github.com/dkinzler/linkboards/internal/boards/application"
 	kithttp "github.com/go-kit/kit/transport/http"
 	mux "github.com/gorilla/mux"
-	"net/http"
 )
 
 func decodeHttpCreateBoardRequest(ctx context.Context, r *http.Request) (interface{}, error) {

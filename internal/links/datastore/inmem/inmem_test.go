@@ -3,7 +3,7 @@ package inmem
 import (
 	"testing"
 
-	"github.com/d39b/linkboards/internal/links/datastore"
+	"github.com/dkinzler/linkboards/internal/links/datastore"
 )
 
 func TestInmemLinkDataStore(t *testing.T) {

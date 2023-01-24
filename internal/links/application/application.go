@@ -3,10 +3,10 @@ package application
 import (
 	"context"
 
-	"github.com/d39b/linkboards/internal/auth"
-	"github.com/d39b/linkboards/internal/links/domain"
+	"github.com/dkinzler/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/links/domain"
 
-	"github.com/d39b/kit/errors"
+	"github.com/dkinzler/kit/errors"
 )
 
 // @Kit{"endpointPackage":"internal/links/transport", "httpPackage":"internal/links/transport"}

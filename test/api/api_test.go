@@ -9,9 +9,9 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/d39b/linkboards/tools/client"
+	"github.com/dkinzler/linkboards/tools/client"
 
-	"github.com/d39b/kit/firebase/emulator"
+	"github.com/dkinzler/kit/firebase/emulator"
 
 	"github.com/stretchr/testify/assert"
 )

@@ -5,10 +5,10 @@ import (
 	"encoding/base64"
 	"strings"
 
-	"github.com/d39b/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/auth"
 
-	"github.com/d39b/kit/errors"
-	lfbauth "github.com/d39b/kit/firebase/auth"
+	"github.com/dkinzler/kit/errors"
+	lfbauth "github.com/dkinzler/kit/firebase/auth"
 
 	fbauth "firebase.google.com/go/v4/auth"
 

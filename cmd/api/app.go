@@ -13,20 +13,20 @@ import (
 	fb "firebase.google.com/go/v4"
 	fbauth "firebase.google.com/go/v4/auth"
 
-	"github.com/d39b/linkboards/internal/auth/middleware"
-	"github.com/d39b/linkboards/internal/auth/store"
-	"github.com/d39b/linkboards/internal/boards"
-	"github.com/d39b/linkboards/internal/links"
+	"github.com/dkinzler/linkboards/internal/auth/middleware"
+	"github.com/dkinzler/linkboards/internal/auth/store"
+	"github.com/dkinzler/linkboards/internal/boards"
+	"github.com/dkinzler/linkboards/internal/links"
 
-	lfb "github.com/d39b/kit/firebase"
+	lfb "github.com/dkinzler/kit/firebase"
 
 	kitjwt "github.com/go-kit/kit/auth/jwt"
 	"github.com/go-kit/kit/endpoint"
 	kithttp "github.com/go-kit/kit/transport/http"
 
-	dhttp "github.com/d39b/kit/transport/http"
+	dhttp "github.com/dkinzler/kit/transport/http"
 
-	"github.com/d39b/kit/log"
+	"github.com/dkinzler/kit/log"
 )
 
 // Configures the application.

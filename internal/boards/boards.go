@@ -1,17 +1,17 @@
 package boards
 
 import (
-	"github.com/d39b/linkboards/internal/auth"
-	"github.com/d39b/linkboards/internal/auth/store"
-	"github.com/d39b/linkboards/internal/boards/application"
-	fs "github.com/d39b/linkboards/internal/boards/datastore/firestore"
-	"github.com/d39b/linkboards/internal/boards/datastore/inmem"
-	"github.com/d39b/linkboards/internal/boards/domain"
-	"github.com/d39b/linkboards/internal/boards/transport"
+	"github.com/dkinzler/linkboards/internal/auth"
+	"github.com/dkinzler/linkboards/internal/auth/store"
+	"github.com/dkinzler/linkboards/internal/boards/application"
+	fs "github.com/dkinzler/linkboards/internal/boards/datastore/firestore"
+	"github.com/dkinzler/linkboards/internal/boards/datastore/inmem"
+	"github.com/dkinzler/linkboards/internal/boards/domain"
+	"github.com/dkinzler/linkboards/internal/boards/transport"
 
-	e "github.com/d39b/kit/endpoint"
-	"github.com/d39b/kit/errors"
-	"github.com/d39b/kit/log"
+	e "github.com/dkinzler/kit/endpoint"
+	"github.com/dkinzler/kit/errors"
+	"github.com/dkinzler/kit/log"
 
 	"cloud.google.com/go/firestore"
 	"github.com/go-kit/kit/endpoint"

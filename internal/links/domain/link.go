@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/d39b/kit/errors"
-	"github.com/d39b/kit/time"
-	"github.com/d39b/kit/uuid"
+	"github.com/dkinzler/kit/errors"
+	"github.com/dkinzler/kit/time"
+	"github.com/dkinzler/kit/uuid"
 )
 
 const (
