@@ -19,7 +19,7 @@ For building this application we have made the following assumptions and require
 - The application should be horizontally scalable by running multiple instances while still guaranteeing consistency.
   This forces us to consider all the problems of distributed systems, e.g. lost updates if multiple API requests try to modify the same data concurrently.
   To keep the system consistent, we will use optimistic transactions.
-  A more detailed discussion of these problems and solutions can be found [below](#consistency,-concurrency-and-scalability).
+  A more detailed discussion of these problems and solutions can be found [below](#consistency-concurrency-and-scalability).
 - We made authentication and authorization a separate component, which forces us to think about how to integrate it with other components.
 - The number of users that can join a link board is limited to 32, which allows us to always load a board with all its users without having to worry about memory.
   In a NoSQL database we can e.g. store a board with all its users as a single document.
