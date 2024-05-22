@@ -23,7 +23,7 @@ type BoardDataStore interface {
 	// as separate entities, with their own data store methods to retrieve and modify them.
 	//
 	// This method returns a TransactionExpectation that can later be passed back into the UpdateBoard method,
-	// to make sure that the board (and its users/invites) wasn't changed before it is updated.
+	// to make sure that the board (and its users/invites) was not changed.
 	Board(ctx context.Context, boardId string) (BoardWithUsersAndInvites, TransactionExpectation, error)
 	Boards(ctx context.Context, boardIds []string) ([]Board, error)
 	BoardsForUser(ctx context.Context, userId string, qp QueryParams) ([]Board, error)
@@ -106,6 +106,14 @@ func (u *DatastoreBoardUpdate) IsEmpty() bool {
 // However for a more complicated scenario, the TransactionExpectation interface could require a method
 // "Combine(other TransactionExpectation) TransactionExpectation" that can be used to combine multiple expectations.
 // I.e. the combined expectation would be used to represent the last modification time of multiple pieces of data.
+//
+// There are other ways of implementing optimistic transactions, for example:
+//   - Instead of explicitly passing back and forth TransactionExpectation values, BoardDataStore could store and retrieve those from the context.Context.
+//     A drawback of this approach is that even more of the responsibility for assuring consistency is put on BoardDataStore implementations.
+//     It is no longer easy to see by looking at the BoardService code what consistency is guaranteed.
+//   - Pass an update function "func(oldValue Board) (newValue Board) { ... }" to BoardDataStore.
+//     The data store implementation can use this function in whatever way necessary but has to guarantee
+//     that the update happens consistently.
 type TransactionExpectation interface{}
 
 // Parameters for data store queries for boards and invites.
@@ -115,10 +123,10 @@ type TransactionExpectation interface{}
 type QueryParams struct {
 	// Valid limit values are between 1 and 100 (inclusive)
 	Limit int
-	// Cursor for pagination, only return elements that were created at or before the given unix time (nanoseconds).
+	// Cursor for pagination, only return elements that were created at or before the given Unix time (nanoseconds).
 	// To obtain the cursor value, one can use the created time of the oldest element in the last query and subtract 1.
 	// Note that this could skip some elements, if they were created at the exact same time, however this is very unlikely
-	// since we use unix time in nanoseconds.
+	// since we use Unix time in nanoseconds.
 	Cursor int64
 }
 

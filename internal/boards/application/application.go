@@ -70,7 +70,7 @@ type BoardApplicationService interface {
 	//	"endpoints": [{"http": {"path":"/boards/{boardId}/users/{userId}", "method":"PATCH"}}]
 	// }
 	EditBoardUser(ctx context.Context, boardId string, userId string, bue BoardUserEdit) (BoardUser, error)
-	// We don't actually expose this method, it is there do demonstrate how we can use go concurrency
+	// We don't actually expose this method, it is there to demonstrate how we can use go concurrency
 	// in service methods that assemble different pieces of data.
 	BoardsAndInvites(ctx context.Context) (BoardsAndInvites, error)
 }
@@ -136,7 +136,7 @@ type BoardWithUsersAndInvites struct {
 	ModifiedTime int64       `json:"modifiedTime,omitempty"`
 	ModifiedBy   domain.User `json:"modifiedBy,omitempty"`
 
-	// should only be included if user has correct access
+	// should only be included if user has required authorization
 	Users   []BoardUser `json:"users"`
 	Invites []Invite    `json:"invites"`
 }
@@ -637,8 +637,8 @@ func (bas *boardApplicationService) BoardsAndInvites(ctx context.Context) (Board
 		return BoardsAndInvites{}, newPermissionDeniedError()
 	}
 
-	// The following will start two go routines to load the boards and invites concurrently.
-	// If at least one of those operations succeed, we return the data that was available, so that client get at least something.
+	// The following will start two goroutines to load boards and invites concurrently.
+	// If at least one of those operations succeed, we return the data that was available, so that clients get at least something.
 
 	bc := runConcurrent(func() ([]Board, error) {
 		boards, err := bas.boardDataStore.BoardsForUser(ctx, user.UserId, domain.NewQueryParams())
@@ -692,6 +692,10 @@ func (bas *boardApplicationService) BoardsAndInvites(ctx context.Context) (Board
 			} else {
 				result.InvitesError = "Could not load invites"
 			}
+		case <-ctx.Done():
+			// Note: this case is not strictly necessary
+			// because both goroutines receive the context and should return an error when the context is cancelled
+			return BoardsAndInvites{}, newServiceError(nil, errors.Cancelled)
 		}
 	}
 
@@ -707,7 +711,7 @@ type result[T any] struct {
 	err    error
 }
 
-// runs the function in a new go routine and returns a channel on which the
+// runs the function in a new goroutine and returns a channel on which the
 // result of the function will be sent once it's done
 func runConcurrent[T any](f func() (T, error)) <-chan result[T] {
 	rChan := make(chan result[T], 1)

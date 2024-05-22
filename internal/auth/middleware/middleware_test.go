@@ -38,7 +38,7 @@ func TestFakeAuthEndpointMiddleware(t *testing.T) {
 	a.True(errors.IsUnauthenticatedError(err))
 	a.False(called)
 
-	// correct header but empty userId shouldn't work
+	// correct header but empty user id shouldn't work
 	v := base64.StdEncoding.EncodeToString([]byte(":somepw"))
 	ctx = context.WithValue(context.Background(), http.ContextKeyRequestAuthorization, "Basic "+v)
 	_, err = mw(e)(ctx, nil)
@@ -53,7 +53,7 @@ func TestFakeAuthEndpointMiddleware(t *testing.T) {
 	a.True(errors.IsUnauthenticatedError(err))
 	a.False(called)
 
-	// with a correct header it should work
+	// with a correct header it works
 	v = base64.StdEncoding.EncodeToString([]byte("u-123-456:somepw"))
 	ctx = context.WithValue(context.Background(), http.ContextKeyRequestAuthorization, "Basic "+v)
 	user, err := mw(e)(ctx, nil)

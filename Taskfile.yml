@@ -82,7 +82,7 @@ tasks:
   
   # Deploy the API using Google Cloud Run
   # Note that for this to work you will have to setup a google cloud project,
-  # build and upload a docker image of this application to a image repository,
+  # build and upload a docker image of this application to an image repository,
   # possibly setup Firebase services, etc..
   gcloud-deploy:
     cmds:

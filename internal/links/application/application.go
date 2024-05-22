@@ -57,7 +57,7 @@ type Link struct {
 	Upvotes   int `json:"upvotes"`
 	Downvotes int `json:"downvotes"`
 
-	// Rating of the user making a request
+	// Rating of the user making the request
 	UserRating int `json:"userRating"`
 }
 
@@ -183,7 +183,6 @@ func (svc *linkApplicationService) DeleteLink(ctx context.Context, boardId strin
 		return newUnauthenticatedError()
 	}
 
-	// user that created the link can also delete it
 	link, err := svc.linkDataStore.Link(ctx, boardId, linkId, domain.LinkReturnFields{})
 	if err != nil {
 		if errors.IsNotFoundError(err) {
@@ -196,7 +195,7 @@ func (svc *linkApplicationService) DeleteLink(ctx context.Context, boardId strin
 	// Should they then be able to delete the link or not?
 
 	// If the user that made the request is not the user that created the link
-	// they need the delete link scope
+	// they need the delete link scope.
 	if link.Link.CreatedBy.UserId != user.UserId {
 		az, err := svc.authChecker.GetAuthorization(ctx, boardId, user.UserId)
 		if err != nil {

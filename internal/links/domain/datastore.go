@@ -21,7 +21,7 @@ type LinkDataStore interface {
 
 // For convenience, LinkDataStore should be able to return a link with its rating (i.e. the summary/aggregate of all user ratings) and possibly
 // the individual rating of a given user.
-// A LinkReturnFields value can be used to configure what a LinkDataStore method should return.
+// A LinkReturnFields value can be used to configure what should be returned.
 type LinkWithRating struct {
 	Link Link
 	// Rating of the link, might be empty
@@ -32,15 +32,17 @@ type LinkWithRating struct {
 
 // Defines what data a LinkDataStore query result should contain
 type LinkReturnFields struct {
-	// Wether or not to include the rating of the link
+	// If true include the ratings of the link
 	IncludeRating bool
-	// Whether or not to include the rating of the user with the given userId (if not empty)
+	// If not empty include the rating of the user with the given userId
 	IncludeUserRatingFor string
 }
 
 type SortOrder string
 
 const SortOrderNewest = "newest"
+
+// sort by rating
 const SortOrderTop = "top"
 
 type LinkQueryParams struct {
@@ -58,7 +60,7 @@ type LinkQueryParams struct {
 	// Return only links with less than or equal to score.
 	// Use a pointer here to distinguish the case where no value is set, since 0 would be a valid cursor value.
 	CursorScore *int
-	// Return only links that were created at or before the given time.
+	// Return only links that were created at or before the given time (Unix nanoseconds).
 	CursorCreatedTime int64
 }
 

@@ -22,6 +22,7 @@ func (t *increasingTimer) curr() time.Time {
 	return time.Date(2022, 0, 0, 0, 0, t.i, 0, time.UTC)
 }
 
+// Tests any implementation of links/domain/LinkDataStore
 func DatastoreTest(ds domain.LinkDataStore, t *testing.T) {
 	a := assert.New(t)
 

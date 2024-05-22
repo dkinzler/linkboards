@@ -1,5 +1,5 @@
 // Package domain implements the business logic for working with boards, users and invites:
-//   - functions to create, validate and work with instances of boards/users/invites
+//   - functions to create, validate and work with boards/users/invites
 //   - general data store interface BoardDataStore, which makes it easy to switch out the actual storage mechanism for the data
 //   - BoardService implements operations that can be performed on boards, users and invites
 package domain
@@ -120,7 +120,7 @@ type BoardUser struct {
 	CreatedTime int64
 	// The user that invited this user to the board.
 	InvitedBy User
-	// Last time this BoardUser was modified (e.g. the role changed) as Unix time (nanoseconds).
+	// Last time this BoardUser was modified (e.g. role changed) as Unix time (nanoseconds).
 	ModifiedTime int64
 	ModifiedBy   User
 }
@@ -170,7 +170,7 @@ type BoardInvite struct {
 	// Random UUIDv4 with prefix "i-"
 	InviteId string
 
-	// Role a user that accepts the invite would have on the board.
+	// Role a user that accepts the invite would have.
 	Role string
 	// If not empty, only the given user can accept the invite.
 	// If empty, any user can.
@@ -221,13 +221,12 @@ func (i BoardInvite) IsExpired() bool {
 	return time.CurrTime().After(expiresTime)
 }
 
-// A board with all its users and invites, which we consider
-// the unit of consistency. I.e. the service methods supported by
-// the datastore should guarantee that there are no
-// concurrent operations on a single board (including its users and invites).
+// A board with all its users and invites is the unit of consistency of this component.
+// I.e. service methods and data stores should guarantee that
+// concurrent operations on a single board (including its users and invites) can't lead to data inconsistencies.
 //
 // This struct does not provide methods to manipulate the sets of users and invites,
-// instead the updates should be encoded using a DatastoreBoardUpdate value.
+// instead the updates will be encoded using a DatastoreBoardUpdate value.
 //
 // Note also that since the number of users and invites for a single board is limited,
 // we do not have to worry about the implications of loading all users/invites for performance and memory.

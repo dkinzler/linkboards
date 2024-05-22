@@ -83,11 +83,11 @@ var roleToScopes = map[string][]auth.Scope{
 }
 
 // scopes available to authenticated users
-var authenticatedScopes auth.Authorization = map[auth.Scope]bool{
-	createBoardScope:     true,
-	listUserBoardsScope:  true,
-	respondToInviteScope: true,
-	listUserInvitesScope: true,
+var authenticatedScopes auth.Authorization = map[auth.Scope]struct{}{
+	createBoardScope:     {},
+	listUserBoardsScope:  {},
+	respondToInviteScope: {},
+	listUserInvitesScope: {},
 }
 
 func NewAuthorizationChecker(as auth.AuthorizationStore) *auth.BoardAuthorizationChecker {

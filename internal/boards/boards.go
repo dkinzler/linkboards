@@ -19,15 +19,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Contains all the necessary elements for running the boards service, i.e. the
-// boards part of the API.
+// Contains all the necessary elements for running the boards service of the API.
 type Component struct {
 	ApplicationService application.BoardApplicationService
 	DataStore          domain.BoardDataStore
 	Endpoints          transport.EndpointSet
 }
 
-// Configures a boards component.
+// Configures board component.
 type Config struct {
 	Logger *log.Logger
 

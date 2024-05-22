@@ -18,15 +18,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Contains all the necessary elements for running the links service, i.e. the
-// links part of the API.
+// Contains all the necessary elements for running the links service of the API.
 type Component struct {
 	ApplicationService application.LinkApplicationService
 	DataStore          domain.LinkDataStore
 	Endpoints          transport.EndpointSet
 }
 
-// Configures a links component.
+// Configures link component.
 type Config struct {
 	Logger *log.Logger
 

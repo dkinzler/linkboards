@@ -49,7 +49,7 @@ var roleToScopes = map[string][]auth.Scope{
 }
 
 // scopes available to authenticated users that are not a member of a board
-var authenticatedScopes auth.Authorization = map[auth.Scope]bool{}
+var authenticatedScopes auth.Authorization = map[auth.Scope]struct{}{}
 
 func NewAuthorizationChecker(as auth.AuthorizationStore) *auth.BoardAuthorizationChecker {
 	return auth.NewAuthorizationChecker(roleToScopes, as)

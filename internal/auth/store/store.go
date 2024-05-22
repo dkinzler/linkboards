@@ -9,7 +9,7 @@ import (
 	"github.com/dkinzler/kit/errors"
 )
 
-// Default implementation of auth.AuthorizationStore that uses an instance of BoardDataStore from the boards package.
+// Default implementation of auth.AuthorizationStore that uses a datastore from the boards package.
 // As the application is implemented right now, the roles a user has for a board are stored in a boards/domain.BoardUser instance that is persisted using a BoardDataStore.
 type DefaultAuthorizationStore struct {
 	ds domain.BoardDataStore

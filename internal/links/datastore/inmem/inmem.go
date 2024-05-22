@@ -1,4 +1,4 @@
-// Package inmem provides an in-memory implementation of boards/domain/BoardDataStore, that
+// Package inmem provides an in-memory implementation of links/domain/LinkDataStore that
 // can be used for development/testing.
 package inmem
 

@@ -17,7 +17,7 @@ import (
 )
 
 // Can be used for development/testing.
-// Simply provide a non-empty user id and any password in the http authorization header
+// To authenticate provide a non-empty user id and any password in the HTTP Authorization header
 // using the basic authentication format (i.e. "Basic base64Encode(userId:password)").
 // Make sure to use the "PopulateRequestContext" RequestFunc from the go-kit/kit/transport/http package as a "ServerBefore" option when creating http handlers.
 func NewFakeAuthEndpointMiddleware() endpoint.Middleware {

@@ -55,5 +55,4 @@ func TestDefaultAuthorizationStore(t *testing.T) {
 	a.Nil(err)
 	a.Len(roles, 1)
 	a.Contains(roles, auth.BoardRoleViewer)
-
 }

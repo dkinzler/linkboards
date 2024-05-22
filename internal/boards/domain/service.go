@@ -28,29 +28,25 @@ const (
 	errCannotChangeRoleOfOwner
 )
 
-// BoardService implements operations on boards, users and invites.
+// BoardService provides operations on boards, users and invites.
 // It uses an implementation of BoardDataStore to read and persist boards/users/invites,
 // and an implementation of EventPublisher to make events available to other components/systems.
 // BoardService does not perform authorization, that should be handled in application services using this package.
 //
-// We consider a board together with its users and invites as the unit of consistency, i.e. operations on BoardService can run concurrently only for different boards.
-// E.g. if two operations try to concurrently create a new invite for the same user on the same board, at most one of the operations should succeed, since for a board there should be at most one invite for a user at any given time.
-// BoardService guarantees consistency by using the optimistic transaction capabilities required of any BoardDataStore implementation.
+// On concurrency, consistency and transactions:
+// We consider a board together with its users and invites as the unit of consistency,
+// i.e. operations on BoardService can run concurrently only for different boards.
+// If two operations e.g. try to concurrently create a new invite for the same user on the same board, at most one of the operations should succeed.
+// BoardService guarantees consistency by using the optimistic transaction capabilities required of BoardDataStore implementations (see also the comments in datastore.go).
+// In this application the number of users of a board is bounded, which in practice makes it very unlikely that concurrent operations on the same board,
+// that could lead to inconsistencies, even happen that often.
 //
-// BoardService handles transactions explicitly, it tells BoardDataStore what data it expects to have not been changed.
-// Instead it could also be implemented implicitly. For operations that read data, BoardDataStore could store transaction expectations in the context value (see the "session" package for a possible implementation), and read/verify those expecatations
-// when modifying data. This works because in methods of BoardService we always pass the same context value to invocations of BoardDataStore methods.
-// With this approach we could change the BoardDataStore interface to no longer return/accept TransactionExpectation values.
-// A drawback of the implicit approach is that it might not be as obvious or easy to understand for someone reading the BoardService code, what kind of consistency is guaranteed/what data is changed transactionally.
-// Note that both the explicit and implicit approach described here still implement optmistic transactions, the only difference is where the transaction expectations are created/kept.
-// For the given application the number of users of a board is bounded, which in practice makes it very unlikely that concurrent operations that could lead to inconsistencies even happen that often.
-//
-// Another way of implementing transactions would be to pass an update function to the data store,
-// e.g. func(oldValue Board) (newValue Board) { ... }.
-// I.e. instead of changing/modifying the data in the service method, the service method would pass a function of this type to the datastore.
-// The datastore method would then read the old value, pass it to the function to get the modified value and then persist it.
-// Since all of this happens in the data store implementation, it has complete control to guarantee consistency using a transaction, no need to pass
-// TransactionExpectation back and forth.
+// There are other ways of guaranteeing consistency, for example by making sure that
+// requests for a given board are never processed concurrently. This would however also take some work, particularly
+// if we want to run multiple instances of BoardService for scalability. Could e.g. route all requests with a given board id to the same instance.
+// With optimistic transactions we can have many instances running at the same time
+// without any additional coordination required while still maintaining consistency.
+// (At least if the backing data store provides suitable consistency guarantees.)
 type BoardService struct {
 	ds BoardDataStore
 	ep EventPublisher
@@ -233,11 +229,10 @@ func (bs *BoardService) AcceptInvite(ctx context.Context, boardId string, invite
 		return newServiceError(err, errors.Internal).WithInternalMessage("could not get board")
 	}
 
-	if !board.ContainsInvite(inviteId) {
+	invite, ok := board.Invite(inviteId)
+	if !ok {
 		return newServiceError(nil, errors.NotFound)
 	}
-
-	invite, _ := board.Invite(inviteId)
 	if invite.IsExpired() {
 		return newServiceError(nil, errors.FailedPrecondition).WithPublicMessage("invite expired").WithPublicCode(errInviteExpired)
 	}
@@ -271,11 +266,11 @@ func (bs *BoardService) DeclineInvite(ctx context.Context, boardId string, invit
 		return newServiceError(err, errors.Internal).WithInternalMessage("could not get board")
 	}
 
-	if !board.ContainsInvite(inviteId) {
+	invite, ok := board.Invite(inviteId)
+	if !ok {
 		return newServiceError(nil, errors.NotFound)
 	}
 
-	invite, _ := board.Invite(inviteId)
 	if invite.User.UserId == "" {
 		return newServiceError(nil, errors.FailedPrecondition).WithPublicMessage("can only decline invites targeted at a specific user").WithPublicCode(errCannotDeclinePublicInvite)
 	}

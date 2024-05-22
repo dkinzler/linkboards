@@ -30,7 +30,7 @@ func newTestDatastores() (domain.BoardDataStore, auth.AuthorizationStore) {
 func TestUnauthenticatedUsersDenied(t *testing.T) {
 	a := assert.New(t)
 
-	// Uauthenticated users are denied
+	// Unauthenticated users are denied
 
 	ctx := context.Background()
 

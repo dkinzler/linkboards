@@ -29,23 +29,11 @@ import (
 	"github.com/dkinzler/kit/log"
 )
 
-// Configures the application.
-//
-// Which dependencies are used and how they are created is determined in-order as follows:
-//   - If UseInmemDependencies is true, use local in-memory dependencies.
-//   - If UseFirebaseEmulators is true, attempt to use firebase emulators.
-//   - If FirebaseServiceAccountFile is not empty, attempt to use it to connect to firebase services,
-//     Firebase Authentication for authentication and Firestore for any data stores.
-//   - Attempt to use application default credentials to connect to firebase services.
-//     These are usually set automatically if the application is run in a google cloud product like Cloud Run or App Engine.
 type Config struct {
-	// Port the API will be reachable at.
-	Port int
-	// Address the API will be reachable at, usually empty to be reachable
-	// on all network interfaces of the system.
+	Port    int
 	Address string
 
-	// If true, use in memory dependencies like data stores and authentication mechanism.
+	// If true, use in memory data stores and authentication mechanism.
 	UseInmemDependencies bool
 
 	// If true, attempt to connect to firebase emulators to use for authentication and data stores.
@@ -53,11 +41,13 @@ type Config struct {
 	UseFirebaseEmulators bool
 	FirebaseProjectId    string
 	// If not empty, try to connect to firebase services using the given service account file.
+	// If empty, attempt to use application default credentials.
+	// These are usually set automatically if the application is run in a google cloud product like Cloud Run or App Engine.
 	FirebaseServiceAccountFile string
 
 	// In debug mode:
 	//   - log messages with level Debug will be output
-	//   - log messages will be pretty printed, i.e. as JSON with multiple indented lines
+	//   - log messages will be pretty printed as JSON with multiple indented lines
 	DebugMode bool
 }
 
